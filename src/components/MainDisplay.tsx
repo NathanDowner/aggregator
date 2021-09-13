@@ -1,6 +1,8 @@
 import { SearchIcon } from '@heroicons/react/outline';
 import { CheckCircleIcon } from '@heroicons/react/solid';
-import { Feed } from '../models/feed.model';
+import { useEffect, useState } from 'react';
+import useGetFeeds from '../hooks/useGetFeeds';
+import { Article, Feed, RSSBase } from '../models/feed.model';
 
 type SourceFilter = {
   name: string;
@@ -18,6 +20,23 @@ type MainDisplayProps = {
 };
 
 const MainDisplay: React.FC<MainDisplayProps> = ({ currentFeed }) => {
+  const [articles, setArticles] = useState<Article[]>([]);
+  const { isLoading, error, getFeeds } = useGetFeeds<RSSBase>();
+
+  function applyData(data: RSSBase[]) {
+    let items: Article[] = [];
+    data.forEach((feed) => {
+      items = items.concat(feed.items);
+    });
+    setArticles(items);
+  }
+
+  useEffect(() => {
+    getFeeds(currentFeed.sources, applyData);
+
+    return () => {};
+  }, [currentFeed, getFeeds]);
+
   return (
     <main className="bg-gray-100 flex-grow px-6 pt-24 ">
       <div className="flex justify-between items-center mb-6">
@@ -43,6 +62,7 @@ const MainDisplay: React.FC<MainDisplayProps> = ({ currentFeed }) => {
         <div className="flex space-x-4">
           {filters.map((source) => (
             <span
+              key={source.name}
               className={`${
                 source.isEnabled ? 'bg-white' : ''
               } inline-flex items-center space-x-1 px-2 py-1 rounded-full `}
