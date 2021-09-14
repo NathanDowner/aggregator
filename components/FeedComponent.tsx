@@ -10,7 +10,11 @@ type FeedComponentProps = {
 
 const FeedComponent = ({ feed, isActive, onSelect }: FeedComponentProps) => {
   return (
-    <Disclosure as="li" key={feed.name} className="cursor-pointer">
+    <Disclosure
+      as="li"
+      key={feed.name}
+      className="cursor-pointer whitespace-nowrap"
+    >
       <div
         onClick={onSelect}
         className={`${

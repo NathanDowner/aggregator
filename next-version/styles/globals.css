@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .form-group {
+    @apply flex flex-col mb-2;
+  }
+
+  .input {
+    @apply pl-2 text-sm px-2 py-1 rounded-full;
+  }
+
+  /* .input.aside {
+    @apply;
+  } */
+}
