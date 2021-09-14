@@ -2,7 +2,8 @@ import { SearchIcon } from '@heroicons/react/outline';
 import { CheckCircleIcon } from '@heroicons/react/solid';
 import { useEffect, useState } from 'react';
 import useGetFeeds from '../hooks/useGetFeeds';
-import { Article, Feed, RSSBase } from '../models/feed.model';
+import { FeedArticle, Feed, RSSBase } from '../models/feed.model';
+import NewsFeed from './NewsFeed';
 
 type SourceFilter = {
   name: string;
@@ -20,11 +21,11 @@ type MainDisplayProps = {
 };
 
 const MainDisplay: React.FC<MainDisplayProps> = ({ currentFeed }) => {
-  const [articles, setArticles] = useState<Article[]>([]);
+  const [articles, setArticles] = useState<FeedArticle[]>([]);
   const { isLoading, error, getFeeds } = useGetFeeds<RSSBase>();
 
   function applyData(data: RSSBase[]) {
-    let items: Article[] = [];
+    let items: FeedArticle[] = [];
     data.forEach((feed) => {
       items = items.concat(feed.items);
     });
@@ -57,7 +58,7 @@ const MainDisplay: React.FC<MainDisplayProps> = ({ currentFeed }) => {
       </div>
 
       {/* Filter Row */}
-      <div className="text-gray-400 text-sm">
+      <div className="text-gray-400 text-sm mb-4">
         <h4 className="font-medium text-gray-500 mb-2">Filters</h4>
         <div className="flex space-x-4">
           {filters.map((source) => (
@@ -75,6 +76,7 @@ const MainDisplay: React.FC<MainDisplayProps> = ({ currentFeed }) => {
           ))}
         </div>
       </div>
+      <NewsFeed articles={articles} />
     </main>
   );
 };

@@ -8,7 +8,7 @@ export interface Source {
   link: string;
 }
 
-export interface Article {
+export interface FeedArticle {
   categories: string[];
   content: string;
   'content:encoded': string;
@@ -35,7 +35,7 @@ export interface RSSBase {
   fedUrl: string;
   generator: string;
   image: FeedImage;
-  items: Article[];
+  items: FeedArticle[];
   language: string;
   lastBuildDate: string;
   link: string;
