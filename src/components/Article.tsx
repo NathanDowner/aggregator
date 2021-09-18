@@ -25,11 +25,11 @@ const Article: React.FC<ArticleProps> = ({ article }) => {
         <h2 className="font-semibold mb-1">{title}</h2>
         {/* tags row */}
         {categories && (
-          <div className="flex space-x-1">
+          <div className="flex space-x-1 overflow-x-auto">
             {categories.slice(0, 3).map((tag) => (
               <span
                 key={tag}
-                className="inline-block px-2 py-1 rounded-full bg-gray-400 text-xs text-white"
+                className="inline-block px-2 py-1 rounded-full bg-gray-400 text-xs text-white whitespace-nowrap"
               >
                 {tag}
               </span>
