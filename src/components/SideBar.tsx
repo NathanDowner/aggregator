@@ -20,7 +20,7 @@ const SideBar: React.FC<SideBarProps> = ({
   const [showAddFeedField, setShowAddFeedField] = useState(false);
 
   return (
-    <aside className="sticky px-8 pt-12 border-l h-screen w-72">
+    <aside className="sticky top-0 px-8 pt-12 border-l h-screen w-72">
       <h1 className="text-green-600 text-2xl">Aggregator</h1>
 
       <div className="mt-8">
