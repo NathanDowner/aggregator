@@ -8,6 +8,11 @@ export interface Source {
   link: string;
 }
 
+export type SourceFilter = {
+  source: Source;
+  isEnabled: boolean;
+};
+
 export interface FeedArticle {
   categories?: string[];
   content: string;
