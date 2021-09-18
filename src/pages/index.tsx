@@ -8,7 +8,7 @@ const feeds: Feed[] = [
   {
     name: 'Tech News',
     sources: [
-      // { name: 'CNET', link: 'https://www.cnet.com/rss/all/' },
+      { name: 'CNET', link: 'https://www.cnet.com/rss/all/' },
       { name: 'FPT', link: 'https://www.frontpagetech.com/feed/' },
       // { name: '9to5 Mac', link: 'https://9to5mac.com/feed/' },
     ],
@@ -22,7 +22,7 @@ export default function Home() {
   return (
     <div className="flex min-h-full">
       <Head>
-        <title>Create Next App</title>
+        <title>Aggregator</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <SideBar

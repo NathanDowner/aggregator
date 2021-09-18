@@ -24,16 +24,18 @@ const Article: React.FC<ArticleProps> = ({ article }) => {
       <header>
         <h2 className="font-semibold mb-1">{title}</h2>
         {/* tags row */}
-        <div className="flex space-x-1">
-          {categories.slice(0, 3).map((tag) => (
-            <span
-              key={tag}
-              className="inline-block px-2 py-1 rounded-full bg-gray-400 text-xs text-white"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
+        {categories && (
+          <div className="flex space-x-1">
+            {categories.slice(0, 3).map((tag) => (
+              <span
+                key={tag}
+                className="inline-block px-2 py-1 rounded-full bg-gray-400 text-xs text-white"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
 
         <div className="flex justify-between text-gray-400 text-xs my-2">
           <p className="flex items-center">

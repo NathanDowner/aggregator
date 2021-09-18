@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import Parser from 'rss-parser';
 import { Source } from '../models/feed.model';
 
-const CORS_PROXY = 'http://localhost:4050/';
+const CORS_PROXY = '/api/proxy/';
 
 type UseGetFeedsReturn<T> = {
   error: null | string;
@@ -21,10 +21,11 @@ export default function useGetFeeds<T>(): UseGetFeedsReturn<T> {
       try {
         const parser = new Parser<T>();
         const promises: Promise<T>[] = sources.map(({ link }) =>
-          parser.parseURL(CORS_PROXY + link)
+          parser.parseURL(CORS_PROXY + `?url=${link}`)
         );
 
         let rssFeeds = await Promise.all(promises);
+        console.log(rssFeeds);
         handleData(rssFeeds);
       } catch (err: any) {
         setError(err.message || 'Something went wrong.');
