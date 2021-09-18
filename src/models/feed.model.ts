@@ -32,7 +32,7 @@ export interface FeedImage {
 
 export interface RSSBase {
   description: string;
-  fedUrl: string;
+  feedUrl: string;
   generator: string;
   image: FeedImage;
   items: FeedArticle[];
