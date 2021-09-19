@@ -36,7 +36,7 @@ const FeedComponent = ({ feed, isActive, onSelect }: FeedComponentProps) => {
       <Disclosure.Panel>
         <ul className="">
           {feed.sources.map((source) => (
-            <li key={source.name} className="ml-4">
+            <li key={source.name} className="ml-4 text-sm text-gray-600">
               {source.name}
             </li>
           ))}

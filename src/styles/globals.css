@@ -8,7 +8,7 @@
   }
 
   .input {
-    @apply pl-2 text-sm px-2 py-1 rounded-full;
+    @apply text-sm px-2 py-2 rounded-lg;
   }
 
   /* .input.aside {
