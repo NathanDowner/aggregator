@@ -2,9 +2,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 const request = require('request');
 
-export default function helloAPI(req: NextApiRequest, res: NextApiResponse) {
+export default function getFeed(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
     // res.status(200).json(req.query.url);
+    res.setHeader('Access-Control-Allow-Origin', '*');
     const url = req.query.url;
     request(url, (error, response, body) => {
       if (error || response.statusCode !== 200) {
