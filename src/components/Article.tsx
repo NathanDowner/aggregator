@@ -24,7 +24,7 @@ const Article: React.FC<ArticleProps> = ({ article }) => {
       <header>
         <h2 className="font-semibold mb-1">{title}</h2>
         {/* tags row */}
-        {categories && (
+        {/* {categories && (
           <div className="flex space-x-1 overflow-x-auto">
             {categories.slice(0, 3).map((tag) => (
               <span
@@ -35,7 +35,7 @@ const Article: React.FC<ArticleProps> = ({ article }) => {
               </span>
             ))}
           </div>
-        )}
+        )} */}
 
         <div className="flex justify-between text-gray-400 text-xs my-2">
           <p className="flex items-center">
