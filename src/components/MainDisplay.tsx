@@ -1,5 +1,5 @@
 import { SearchIcon } from '@heroicons/react/outline';
-import { CheckCircleIcon } from '@heroicons/react/solid';
+import { CheckCircleIcon, SortDescendingIcon } from '@heroicons/react/solid';
 import { useEffect, useState } from 'react';
 import useGetFeeds from '../hooks/useGetFeeds';
 import {
@@ -12,6 +12,7 @@ import {
 import { compareFeedUrls } from '../utils';
 import FilterBar from './FilterBar';
 import NewsFeed from './NewsFeed';
+import SortControls from './SortControls';
 
 type MainDisplayProps = {
   currentFeed: Feed;
@@ -68,6 +69,7 @@ const MainDisplay: React.FC<MainDisplayProps> = ({ currentFeed }) => {
 
   useEffect(() => {
     getFeeds(currentFeed.sources, applyData);
+    setFilters(initializeFilters(currentFeed.sources));
   }, [currentFeed, getFeeds]);
 
   return (
@@ -102,9 +104,22 @@ const MainDisplay: React.FC<MainDisplayProps> = ({ currentFeed }) => {
         <div>Loading ...</div>
       ) : (
         <>
-          {/* Filter Row */}
-          <FilterBar filters={filters} onToggleFilter={handleToggleFilter} />
-          <NewsFeed articles={articles} />
+          <div className="text-gray-400 text-sm mb-4">
+            <div className="flex justify-between font-medium text-gray-500 mb-2">
+              <h4 className="">Filters</h4>
+              <h4 className="">Sort</h4>
+            </div>
+            <div className="flex justify-between">
+              <FilterBar
+                filters={filters}
+                onToggleFilter={handleToggleFilter}
+              />
+
+              <SortControls />
+            </div>
+          </div>
+          {!error && <NewsFeed articles={articles} />}
+          {error && <p>Error: {error}</p>}
         </>
       )}
     </main>
