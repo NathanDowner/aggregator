@@ -16,14 +16,16 @@ const FeedComponent = ({ feed, isActive, onSelect }: FeedComponentProps) => {
       className="cursor-pointer whitespace-nowrap"
     >
       <div
-        onClick={onSelect}
         className={`${
           isActive ? 'bg-blue-500 text-white' : ''
         } flex justify-between items-center p-2 my-1 text-sm w-full text-left ${
           !isActive && 'hover:bg-blue-200'
         } rounded-lg`}
       >
-        <div className="flex items-center space-x-2">
+        <div
+          onClick={onSelect}
+          className="flex flex-grow items-center space-x-2"
+        >
           <RssIcon className="h-4" />
           <span className="text-sm">{feed.name}</span>
         </div>
