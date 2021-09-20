@@ -53,12 +53,12 @@ const Article: React.FC<ArticleProps> = ({ article }) => {
         className="text-sm text-gray-600"
         dangerouslySetInnerHTML={sanitizeHtml()}
       />
-      <footer className=" flex justify-end">
+      <footer className=" flex justify-start">
         <a
           href={link}
           target="_blank"
           rel="noreferrer"
-          className="px-3 py-2 text-white bg-blue-500 rounded-lg"
+          className="px-3 py-2 mt-4 text-white bg-blue-500 rounded-lg"
         >
           See Full
         </a>
