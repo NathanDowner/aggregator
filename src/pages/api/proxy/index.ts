@@ -9,7 +9,6 @@ export default function getFeed(req: NextApiRequest, res: NextApiResponse) {
     const url = req.query.url;
     request(url, (error, response, body) => {
       if (error || response.statusCode !== 200) {
-        console.log(error.message);
         return res.status(500).json({ type: 'error', message: error.message });
       }
       res.setHeader('Content-Type', 'application/rss+xml');

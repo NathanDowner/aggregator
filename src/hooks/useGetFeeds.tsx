@@ -25,7 +25,7 @@ export default function useGetFeeds<T>(): UseGetFeedsReturn<T> {
         );
 
         let rssFeeds = await Promise.all(promises);
-        console.log(rssFeeds);
+
         handleData(rssFeeds);
       } catch (err: any) {
         setError(err.message || 'Something went wrong.');
