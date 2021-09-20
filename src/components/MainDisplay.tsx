@@ -1,6 +1,6 @@
 import { SearchIcon } from '@heroicons/react/outline';
 import { CheckCircleIcon, SortDescendingIcon } from '@heroicons/react/solid';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import useGetFeeds from '../hooks/useGetFeeds';
 import {
   FeedArticle,
@@ -31,9 +31,12 @@ const MainDisplay: React.FC<MainDisplayProps> = ({ currentFeed }) => {
   );
 
   function applyData(data: RSSBase[]) {
-    const filteredArticles: FeedArticle[] = getFilteredFeeds(data, filters);
-    setArticles(filteredArticles);
     setRssFeeds(data);
+    let items: FeedArticle[] = [];
+    data.forEach((feed) => {
+      items = items.concat(feed.items);
+    });
+    setArticles(items);
   }
 
   function getFilteredFeeds(
@@ -63,8 +66,10 @@ const MainDisplay: React.FC<MainDisplayProps> = ({ currentFeed }) => {
   }
 
   useEffect(() => {
-    const filteredArticles = getFilteredFeeds(rssFeeds, filters);
-    setArticles(filteredArticles);
+    if (!isLoading) {
+      const filteredArticles = getFilteredFeeds(rssFeeds, filters);
+      setArticles(filteredArticles);
+    }
   }, [filters]);
 
   useEffect(() => {
@@ -100,24 +105,22 @@ const MainDisplay: React.FC<MainDisplayProps> = ({ currentFeed }) => {
         )}
       </div>
 
+      <div className="text-gray-400 text-sm mb-4">
+        <div className="flex justify-between font-medium text-gray-500 mb-2">
+          <h4 className="">Filters</h4>
+          <h4 className="">Sort</h4>
+        </div>
+        <div className="flex justify-between">
+          <FilterBar filters={filters} onToggleFilter={handleToggleFilter} />
+
+          <SortControls />
+        </div>
+      </div>
+
       {isLoading ? (
         <div>Loading ...</div>
       ) : (
         <>
-          <div className="text-gray-400 text-sm mb-4">
-            <div className="flex justify-between font-medium text-gray-500 mb-2">
-              <h4 className="">Filters</h4>
-              <h4 className="">Sort</h4>
-            </div>
-            <div className="flex justify-between">
-              <FilterBar
-                filters={filters}
-                onToggleFilter={handleToggleFilter}
-              />
-
-              <SortControls />
-            </div>
-          </div>
           {!error && <NewsFeed articles={articles} />}
           {error && <p>Error: {error}</p>}
         </>
