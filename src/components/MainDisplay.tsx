@@ -2,6 +2,7 @@ import { SearchIcon } from '@heroicons/react/outline';
 import { CheckCircleIcon, SortDescendingIcon } from '@heroicons/react/solid';
 import { useEffect, useMemo, useState } from 'react';
 import useGetFeeds from '../hooks/useGetFeeds';
+import useSortableData from '../hooks/useSortableData';
 import {
   FeedArticle,
   Feed,
@@ -29,6 +30,23 @@ const MainDisplay: React.FC<MainDisplayProps> = ({ currentFeed }) => {
   const [filters, setFilters] = useState<SourceFilter[]>(() =>
     initializeFilters(currentFeed.sources)
   );
+
+  const { items, requestSort, sortConfig } = useSortableData<FeedArticle>(
+    articles,
+    { direction: 'descending', key: 'isoDate' }
+  );
+
+  useEffect(() => {
+    if (!isLoading) {
+      const filteredArticles = getFilteredFeeds(rssFeeds, filters);
+      setArticles(filteredArticles);
+    }
+  }, [filters]);
+
+  useEffect(() => {
+    getFeeds(currentFeed.sources, applyData);
+    setFilters(initializeFilters(currentFeed.sources));
+  }, [currentFeed, getFeeds]);
 
   function applyData(data: RSSBase[]) {
     setRssFeeds(data);
@@ -64,18 +82,6 @@ const MainDisplay: React.FC<MainDisplayProps> = ({ currentFeed }) => {
       )
     );
   }
-
-  useEffect(() => {
-    if (!isLoading) {
-      const filteredArticles = getFilteredFeeds(rssFeeds, filters);
-      setArticles(filteredArticles);
-    }
-  }, [filters]);
-
-  useEffect(() => {
-    getFeeds(currentFeed.sources, applyData);
-    setFilters(initializeFilters(currentFeed.sources));
-  }, [currentFeed, getFeeds]);
 
   return (
     <main className="bg-gray-100 flex-grow px-6 pt-24 ">
@@ -113,7 +119,7 @@ const MainDisplay: React.FC<MainDisplayProps> = ({ currentFeed }) => {
         <div className="flex justify-between">
           <FilterBar filters={filters} onToggleFilter={handleToggleFilter} />
 
-          <SortControls />
+          <SortControls onSort={requestSort} sortConfig={sortConfig} />
         </div>
       </div>
 
@@ -121,7 +127,7 @@ const MainDisplay: React.FC<MainDisplayProps> = ({ currentFeed }) => {
         <div>Loading ...</div>
       ) : (
         <>
-          {!error && <NewsFeed articles={articles} />}
+          {!error && <NewsFeed articles={items} />}
           {error && <p>Error: {error}</p>}
         </>
       )}
