@@ -1,4 +1,5 @@
 import { SearchIcon } from '@heroicons/react/outline';
+import { XCircleIcon } from '@heroicons/react/solid';
 import { useState } from 'react';
 import useDebounce from '../hooks/useDebounce';
 
@@ -13,6 +14,8 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   useDebounce(() => onSearch(searchTerm), DEBOUNCE_DURATION, [searchTerm]);
 
   const handleChange = (e) => setSearchTerm(e.target.value);
+
+  const clearText = () => setSearchTerm('');
   return (
     <div className="flex items-center bg-white input shadow-sm focus-within:ring-2 focus-within:ring-blue-400">
       <SearchIcon className="h-4 mr-1 text-gray-400 flex-shrink-0" />
@@ -23,6 +26,12 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
         onChange={handleChange}
         placeholder="Search"
       />
+      {Boolean(searchTerm.length) && (
+        <XCircleIcon
+          onClick={clearText}
+          className="h-4 mr-1 text-gray-400 flex-shrink-0 cursor-pointer"
+        />
+      )}
     </div>
   );
 };
