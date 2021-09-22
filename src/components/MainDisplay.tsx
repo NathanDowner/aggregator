@@ -1,6 +1,5 @@
-import { SearchIcon } from '@heroicons/react/outline';
 import { CheckCircleIcon, SortDescendingIcon } from '@heroicons/react/solid';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import useGetFeeds from '../hooks/useGetFeeds';
 import useSortableData from '../hooks/useSortableData';
 import {
@@ -13,6 +12,7 @@ import {
 import { compareFeedUrls } from '../utils';
 import FilterBar from './FilterBar';
 import NewsFeed from './NewsFeed';
+import SearchBar from './SearchBar';
 import SortControls from './SortControls';
 
 type MainDisplayProps = {
@@ -30,6 +30,9 @@ const MainDisplay: React.FC<MainDisplayProps> = ({ currentFeed }) => {
   const [filters, setFilters] = useState<SourceFilter[]>(() =>
     initializeFilters(currentFeed.sources)
   );
+
+  const [isUsingSearchFilter, setIsUsingSearchFilter] = useState(false);
+  const [searchFilterItems, setSearchFilterItems] = useState<FeedArticle[]>([]);
 
   const { items, requestSort, sortConfig } = useSortableData<FeedArticle>(
     articles,
@@ -83,6 +86,21 @@ const MainDisplay: React.FC<MainDisplayProps> = ({ currentFeed }) => {
     );
   }
 
+  function handleSearch(searchTerm: string) {
+    console.log(searchTerm);
+    if (searchTerm.length) {
+      const filteredItems = items.filter((article) =>
+        article.title.toLowerCase().includes(searchTerm.trim())
+      );
+
+      setSearchFilterItems(filteredItems);
+      setIsUsingSearchFilter(true);
+    } else {
+      setSearchFilterItems([]);
+      setIsUsingSearchFilter(false);
+    }
+  }
+
   return (
     <main className="bg-gray-100 flex-grow px-6 pt-24 ">
       <div className="mb-6 text-gray-700">
@@ -92,21 +110,19 @@ const MainDisplay: React.FC<MainDisplayProps> = ({ currentFeed }) => {
             {currentFeed.name ?? 'Your Feed'}
           </h2>
 
-          {/* Searchbar */}
-          <div className="flex items-center bg-white input shadow-sm ">
-            <SearchIcon className="h-4 mr-1 text-gray-400 flex-shrink-0" />
-            <input
-              type="text"
-              className="text-md text-gray-400 flex-1"
-              placeholder="Search"
-            />
-          </div>
+          <SearchBar onSearch={handleSearch} />
         </div>
         {isLoading ? (
           <p>...</p>
         ) : (
           <h4>
-            {articles.length} result{articles.length === 1 ? '' : 's'}
+            {isUsingSearchFilter ? searchFilterItems.length : articles.length}{' '}
+            result
+            {(isUsingSearchFilter
+              ? searchFilterItems.length
+              : articles.length) === 1
+              ? ''
+              : 's'}
           </h4>
         )}
       </div>
@@ -127,7 +143,11 @@ const MainDisplay: React.FC<MainDisplayProps> = ({ currentFeed }) => {
         <div>Loading ...</div>
       ) : (
         <>
-          {!error && <NewsFeed articles={items} />}
+          {!error && (
+            <NewsFeed
+              articles={isUsingSearchFilter ? searchFilterItems : items}
+            />
+          )}
           {error && <p>Error: {error}</p>}
         </>
       )}
