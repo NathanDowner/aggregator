@@ -10,7 +10,7 @@ export default function Home() {
     {
       name: 'Tech News',
       sources: [
-        { name: 'CNET', link: 'https://feed.cnet.com/feed/all' },
+        { name: 'CNET', link: 'http://rss.cnn.com/rss/edition_technology.rss' },
         { name: 'FPT', link: 'https://www.frontpagetech.com/feed/' },
         { name: '9to5 Mac', link: 'https://9to5mac.com/feed/' },
       ],
