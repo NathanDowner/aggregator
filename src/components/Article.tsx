@@ -20,7 +20,7 @@ const Article: React.FC<ArticleProps> = ({ article }) => {
 
   const postDate = new Date(isoDate);
   return (
-    <article className="bg-white p-4 shadow-lg rounded-lg">
+    <article className="bg-white p-4 shadow-lg rounded-lg mb-4">
       <header>
         <h2 className="font-semibold mb-1">{title}</h2>
         {/* tags row */}
@@ -58,7 +58,7 @@ const Article: React.FC<ArticleProps> = ({ article }) => {
           href={link}
           target="_blank"
           rel="noreferrer"
-          className="px-3 py-2 mt-4 text-white bg-blue-500 rounded-lg"
+          className="button text-blue-500 bg-blue-50 hover:bg-blue-100"
         >
           See Full
         </a>
