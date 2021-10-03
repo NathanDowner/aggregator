@@ -58,7 +58,7 @@ const Article: React.FC<ArticleProps> = ({ article }) => {
           href={link}
           target="_blank"
           rel="noreferrer"
-          className="button text-blue-500 bg-blue-50 hover:bg-blue-100"
+          className="button text-primary-500 bg-primary-100 hover:bg-primary-200"
         >
           See Full
         </a>
