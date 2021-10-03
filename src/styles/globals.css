@@ -41,6 +41,17 @@
     @apply ml-4;
   }
 
+  .article-content img {
+    @apply mb-2;
+  }
+  .article-content p {
+    @apply mb-1;
+  }
+
+  .article-content a {
+    @apply text-blue-400 hover:underline;
+  }
+
   /* .masonry-grid */
 
   /* .input.aside {

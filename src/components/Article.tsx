@@ -50,7 +50,7 @@ const Article: React.FC<ArticleProps> = ({ article }) => {
         </div>
       </header>
       <div
-        className="text-sm text-gray-600"
+        className="article-content text-sm text-gray-600"
         dangerouslySetInnerHTML={sanitizeHtml()}
       />
       <footer className=" flex justify-start">
