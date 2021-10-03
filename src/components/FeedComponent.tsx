@@ -1,6 +1,7 @@
 import { Disclosure, Transition } from '@headlessui/react';
 import { RssIcon, ChevronDownIcon } from '@heroicons/react/solid';
 import { Feed } from '../models/feed.model';
+import Animations from './animations';
 
 type FeedComponentProps = {
   feed: Feed;
@@ -41,14 +42,7 @@ const FeedComponent = ({ feed, isActive, onSelect }: FeedComponentProps) => {
               />
             </Disclosure.Button>
           </div>
-          <Transition
-            enter="transition duration-100 ease-out"
-            enterFrom="transform -translate-y-2"
-            enterTo="transform translate-y-0"
-            leave="transition duration-75 ease-out"
-            leaveFrom="transform translate-y-0"
-            leaveTo="transform -translate-y-2"
-          >
+          <Animations.AppearDown reveal={open}>
             <Disclosure.Panel>
               <ul className="feed-src-list">
                 {feed.sources.map((source) => (
@@ -61,7 +55,7 @@ const FeedComponent = ({ feed, isActive, onSelect }: FeedComponentProps) => {
                 ))}
               </ul>
             </Disclosure.Panel>
-          </Transition>
+          </Animations.AppearDown>
         </>
       )}
     </Disclosure>
