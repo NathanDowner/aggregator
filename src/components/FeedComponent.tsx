@@ -21,7 +21,7 @@ const FeedComponent = ({ feed, isActive, onSelect }: FeedComponentProps) => {
         <>
           <div
             className={`${
-              isActive ? 'bg-blue-500 text-white' : 'hover:text-blue-500'
+              isActive ? 'bg-primary-500 text-white' : 'hover:text-primary-500'
             } flex justify-between items-center p-2 my-1 text-sm w-full text-left
          rounded-lg `}
           >
@@ -35,7 +35,7 @@ const FeedComponent = ({ feed, isActive, onSelect }: FeedComponentProps) => {
 
             <Disclosure.Button
               className={`border-2 ${
-                isActive ? 'border-blue-500' : 'border-white'
+                isActive ? 'border-primary-500' : 'border-white'
               } box-border hover:border-white rounded-lg p-1 `}
             >
               <ChevronDownIcon
