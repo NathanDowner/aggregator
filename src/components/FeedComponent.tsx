@@ -1,7 +1,8 @@
-import { Disclosure, Transition } from '@headlessui/react';
+import { Disclosure } from '@headlessui/react';
 import { RssIcon, ChevronDownIcon } from '@heroicons/react/solid';
 import { Feed } from '../models/feed.model';
 import Animations from './animations';
+import SourceForm from './SourceForm';
 
 type FeedComponentProps = {
   feed: Feed;
@@ -53,6 +54,9 @@ const FeedComponent = ({ feed, isActive, onSelect }: FeedComponentProps) => {
                     {source.name}
                   </li>
                 ))}
+                <li className="source">
+                  <SourceForm />
+                </li>
               </ul>
             </Disclosure.Panel>
           </Animations.AppearDown>
