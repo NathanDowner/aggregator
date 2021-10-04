@@ -1,54 +1,89 @@
+import { Transition } from '@headlessui/react';
 import { PlusCircleIcon } from '@heroicons/react/solid';
 import { useState } from 'react';
 import { Feed } from '../models/feed.model';
+import Animations from './animations';
 import FeedComponent from './FeedComponent';
-import SideBarForm from './SideBarForm';
+import SourceForm from './SourceForm';
 
 type SideBarProps = {
   feeds: Feed[];
   activeFeedIndex: number;
   setActiveFeed: React.Dispatch<React.SetStateAction<number>>;
+  onAddFeed: (feedName: string) => void;
+  onAddSource: (feedName: string, sourceName: string, url: string) => void;
 };
 
 const SideBar: React.FC<SideBarProps> = ({
   feeds,
   activeFeedIndex,
   setActiveFeed,
+  onAddFeed,
+  onAddSource,
 }) => {
   const [showAddFeedField, setShowAddFeedField] = useState(false);
+  const [newFeedName, setNewFeedName] = useState('');
 
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (newFeedName.trim() !== '') {
+      onAddFeed(newFeedName);
+      setNewFeedName('');
+    }
+  }
+
+  function toggleShowAddFeedField() {
+    setShowAddFeedField((prev) => !prev);
+  }
+
+  const addSourceForm = (feedName: string): JSX.Element => (
+    <SourceForm onAddSource={(name, url) => onAddSource(feedName, name, url)} />
+  );
   return (
     <aside className="sticky top-0 px-8 pt-12 flex-shrink-0 border-l h-screen w-72">
       <h1 className="text-green-600 text-2xl">Aggregator</h1>
 
       <div className="mt-8">
         <div className="flex justify-between items-center mb-1 pb-1 border-b">
-          <h4>My Feeds</h4>
+          <h4 className="font-semibold text-lg">My Feeds</h4>
           <PlusCircleIcon
-            onClick={() => setShowAddFeedField(true)}
-            className="h-4 cursor-pointer"
+            onClick={toggleShowAddFeedField}
+            className={`h-6 cursor-pointer ${
+              showAddFeedField && 'rotate-45 text-red-400'
+            } transition-transform`}
           />
         </div>
-        <ul className="">
+        <ul>
           {feeds.map((feed, index) => (
             <FeedComponent
               key={feed.name}
               feed={feed}
+              addSourceForm={addSourceForm}
               isActive={activeFeedIndex === index}
               onSelect={() => setActiveFeed(index)}
             />
           ))}
-          {showAddFeedField && (
-            <input
-              type="text"
-              placeholder="Create a new feed"
-              autoFocus
-              className="p-2 w-full text-sm border-b-2 border-blue-500 outline-none"
-            />
-          )}
-        </ul>
 
-        {/* <SideBarForm onSubmit={handleAddFeed} /> */}
+          <Animations.AppearDown reveal={showAddFeedField}>
+            <form onSubmit={handleSubmit}>
+              <input
+                type="text"
+                id="name"
+                placeholder="Create a new feed"
+                autoFocus
+                autoComplete="off"
+                className="input w-full text-sm border-2 border-gray-400 outline-none"
+                value={newFeedName}
+                onChange={(e) => setNewFeedName(e.target.value)}
+              />
+              {Boolean(newFeedName.length) && (
+                <button type="submit" className="button text-xs">
+                  Add Feed
+                </button>
+              )}
+            </form>
+          </Animations.AppearDown>
+        </ul>
       </div>
     </aside>
   );

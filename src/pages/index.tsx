@@ -22,6 +22,31 @@ export default function Home() {
       ],
     },
   ]);
+
+  function handleAddFeed(feedName: string) {
+    if (!feeds.find((f) => f.name === feedName)) {
+      const newFeed: Feed = { name: feedName, sources: [] };
+      setFeeds((prev) => [...prev, newFeed]);
+    }
+  }
+
+  function handleAddSource(feedName: string, sourceName: string, url: string) {
+    setFeeds((prev) => {
+      const feedIndex = feeds.findIndex((feed) => feed.name === feedName);
+      return [
+        ...prev.slice(0, feedIndex),
+        {
+          ...prev[feedIndex],
+          sources: [
+            ...prev[feedIndex].sources,
+            { name: sourceName, link: url },
+          ],
+        },
+        ...prev.slice(feedIndex + 1),
+      ];
+    });
+  }
+
   return (
     <div className="flex min-h-full">
       <Head>
@@ -32,8 +57,12 @@ export default function Home() {
         feeds={feeds}
         activeFeedIndex={activeFeedIndex}
         setActiveFeed={setActiveFeedIndex}
+        onAddFeed={handleAddFeed}
+        onAddSource={handleAddSource}
       />
       <MainDisplay currentFeed={feeds[activeFeedIndex]} />
     </div>
   );
+
+  // TODO static/ server side render the feeds
 }
