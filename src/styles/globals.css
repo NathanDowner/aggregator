@@ -12,7 +12,7 @@
   }
 
   .button {
-    @apply px-3 py-2 mt-4 text-white bg-blue-500 rounded-lg;
+    @apply px-3 py-2 mt-4 text-white bg-primary-500 rounded-lg;
   }
 
   .feed-src-list {
@@ -21,7 +21,7 @@
 
   .feed-src-list::after {
     content: '';
-    @apply absolute top-0 left-2 w-0.5 h-full bg-blue-500 transform -translate-y-3;
+    @apply absolute top-0 left-2 w-0.5 h-full bg-primary-500 transform -translate-y-3;
   }
 
   .source {
@@ -30,7 +30,7 @@
 
   .source::before {
     content: '';
-    @apply absolute -left-3 top-1/2 h-0.5 w-3 rounded-full bg-blue-500;
+    @apply absolute -left-3 top-1/2 h-0.5 w-3 rounded-full bg-primary-500;
   }
 
   .masonry-grid {
@@ -49,7 +49,7 @@
   }
 
   .article-content a {
-    @apply text-blue-400 hover:underline;
+    @apply text-primary-400 hover:underline;
   }
 
   /* .masonry-grid */
