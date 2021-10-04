@@ -1,5 +1,10 @@
 import { Disclosure } from '@headlessui/react';
-import { RssIcon, ChevronDownIcon } from '@heroicons/react/solid';
+import {
+  RssIcon,
+  ChevronDownIcon,
+  PencilIcon,
+  TrashIcon,
+} from '@heroicons/react/solid';
 import { Feed } from '../models/feed.model';
 import Animations from './animations';
 
@@ -54,9 +59,13 @@ const FeedComponent = ({
                 {feed.sources.map((source) => (
                   <li
                     key={source.name}
-                    className=" source py-1 text-sm text-gray-600"
+                    className="group flex items-center space-x-1 source py-1 text-sm text-gray-600"
                   >
-                    {source.name}
+                    <span className="truncate">{source.name}</span>
+                    <span className="hidden group-hover:inline-flex space-x-1">
+                      <PencilIcon className="h-4 text-primary-500 bg-primary-100 rounded-md p-0.5 hover:bg-primary-200" />
+                      <TrashIcon className="h-4 text-red-500 bg-red-100 rounded-md p-0.5 hover:bg-red-200" />
+                    </span>
                   </li>
                 ))}
                 <li className="source">{addSourceForm(feed.name)}</li>
