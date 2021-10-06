@@ -28,7 +28,7 @@ const SourceForm: React.FC<Props> = ({ onAddSource }) => {
       {!showAddSourceForm ? (
         <button
           onClick={toggleShowInput}
-          className="flex items-center text-primary-500  rounded-md w-min px-2 py-1 hover:bg-blue-100 transition"
+          className="flex items-center text-primary-500 rounded-md w-min px-2 py-1 hover:bg-blue-100 transform -translate-x-2 hover:translate-x-0 transition"
         >
           <PlusIcon className="h-4" />
           Add Source
