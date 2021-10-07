@@ -1,5 +1,6 @@
 import { CheckIcon, LinkIcon, PlusIcon, TagIcon } from '@heroicons/react/solid';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import useCheckIfClickedOutside from '../hooks/useCheckIfClickedOutside';
 
 type Props = {
   onAddSource: (sourceName: string, url: string) => void;
@@ -9,6 +10,13 @@ const SourceForm: React.FC<Props> = ({ onAddSource }) => {
   const [showAddSourceForm, setShowAddSourceForm] = useState(false);
   const [sourceName, setSourceName] = useState('');
   const [url, setUrl] = useState('');
+  const formRef = useRef<HTMLFormElement>(null);
+
+  useCheckIfClickedOutside(
+    formRef,
+    () => setShowAddSourceForm(false),
+    showAddSourceForm
+  );
 
   const toggleShowInput = () => setShowAddSourceForm((prev) => !prev);
 
@@ -36,6 +44,7 @@ const SourceForm: React.FC<Props> = ({ onAddSource }) => {
       ) : (
         <>
           <form
+            ref={formRef}
             onSubmit={handleSubmit}
             className="flex border-2 border-primary-500 rounded-lg"
           >
