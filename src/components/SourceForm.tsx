@@ -52,7 +52,7 @@ const SourceForm: React.FC<Props> = ({ onAddSource }) => {
                   onChange={(e) => setSourceName(e.target.value)}
                 />
               </div>
-              <div className="h-0.5 bg-gray-200 my-1 rounded-full" />
+              <div className="h-[1px] bg-gray-200 my-1 rounded-full" />
               <div className="flex items-center space-x-1">
                 <LinkIcon className="h-4 flex-shrink-0 text-gray-400" />
                 <input
@@ -73,12 +73,6 @@ const SourceForm: React.FC<Props> = ({ onAddSource }) => {
               <CheckIcon className="text-white h-4 px-1" />
             </button>
           </form>
-          <span
-            onClick={toggleShowInput}
-            className="text-gray-400 mt-2 text-xs hover:underline cursor-pointer"
-          >
-            Cancel
-          </span>
         </>
       )}
     </>
