@@ -30,20 +30,19 @@ export default function Home() {
     }
   }
 
-  function handleAddSource(feedName: string, sourceName: string, url: string) {
+  function handleUpdateFeed(feed: Feed) {
     setFeeds((prev) => {
-      const feedIndex = feeds.findIndex((feed) => feed.name === feedName);
-      return [
-        ...prev.slice(0, feedIndex),
-        {
-          ...prev[feedIndex],
-          sources: [
-            ...prev[feedIndex].sources,
-            { name: sourceName, link: url },
-          ],
-        },
-        ...prev.slice(feedIndex + 1),
-      ];
+      const feedIndex = feeds.findIndex(
+        (existingFeed) => existingFeed.name === feed.name
+      );
+
+      if (feedIndex !== -1) {
+        return [
+          ...prev.slice(0, feedIndex),
+          { ...feed },
+          ...prev.slice(feedIndex + 1),
+        ];
+      }
     });
   }
 
@@ -58,7 +57,7 @@ export default function Home() {
         activeFeedIndex={activeFeedIndex}
         setActiveFeed={setActiveFeedIndex}
         onAddFeed={handleAddFeed}
-        onAddSource={handleAddSource}
+        onUpdateFeed={handleUpdateFeed}
       />
       <MainDisplay currentFeed={feeds[activeFeedIndex]} />
     </div>

@@ -4,14 +4,13 @@ import { useState } from 'react';
 import { Feed } from '../models/feed.model';
 import Animations from './animations';
 import FeedComponent from './FeedComponent';
-import SourceForm from './SourceForm';
 
 type SideBarProps = {
   feeds: Feed[];
   activeFeedIndex: number;
   setActiveFeed: React.Dispatch<React.SetStateAction<number>>;
   onAddFeed: (feedName: string) => void;
-  onAddSource: (feedName: string, sourceName: string, url: string) => void;
+  onUpdateFeed: (feed: Feed) => void;
 };
 
 const SideBar: React.FC<SideBarProps> = ({
@@ -19,7 +18,7 @@ const SideBar: React.FC<SideBarProps> = ({
   activeFeedIndex,
   setActiveFeed,
   onAddFeed,
-  onAddSource,
+  onUpdateFeed,
 }) => {
   const [showAddFeedField, setShowAddFeedField] = useState(false);
   const [newFeedName, setNewFeedName] = useState('');
@@ -36,9 +35,6 @@ const SideBar: React.FC<SideBarProps> = ({
     setShowAddFeedField((prev) => !prev);
   }
 
-  const addSourceForm = (feedName: string): JSX.Element => (
-    <SourceForm onAddSource={(name, url) => onAddSource(feedName, name, url)} />
-  );
   return (
     <aside className="sticky top-0 px-8 pt-12 flex-shrink-0 border-l h-screen w-72">
       <h1 className="text-green-600 text-2xl">Aggregator</h1>
@@ -58,8 +54,8 @@ const SideBar: React.FC<SideBarProps> = ({
             <FeedComponent
               key={feed.name}
               feed={feed}
-              addSourceForm={addSourceForm}
               isActive={activeFeedIndex === index}
+              onUpdateFeed={onUpdateFeed}
               onSelect={() => setActiveFeed(index)}
             />
           ))}
