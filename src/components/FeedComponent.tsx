@@ -1,13 +1,9 @@
 import { Disclosure } from '@headlessui/react';
-import {
-  RssIcon,
-  ChevronDownIcon,
-  PencilIcon,
-  TrashIcon,
-} from '@heroicons/react/solid';
+import { RssIcon, ChevronDownIcon } from '@heroicons/react/solid';
 import { useState } from 'react';
 import { Feed } from '../models/feed.model';
 import Animations from './animations';
+import FeedSource from './FeedSource';
 import SourceForm from './SourceForm';
 
 type FeedComponentProps = {
@@ -43,6 +39,16 @@ const FeedComponent = ({
     setUpdatedFeed((prev) => ({
       ...prev,
       sources: prev.sources.filter((src) => src.name !== sourceName),
+    }));
+  };
+
+  const handleEditSourceName = (index: number, newName: string) => {
+    setIsEditing(true);
+    setUpdatedFeed((prev) => ({
+      ...prev,
+      sources: prev.sources.map((src, idx) =>
+        idx === index ? { ...src, name: newName } : src
+      ),
     }));
   };
 
@@ -91,20 +97,15 @@ const FeedComponent = ({
           <Animations.AppearDown reveal={open}>
             <Disclosure.Panel className="text-gray-600">
               <ul className="feed-src-list">
-                {updatedFeed.sources.map((source) => (
-                  <li
+                {updatedFeed.sources.map((source, index) => (
+                  <FeedSource
                     key={source.name}
-                    className="group flex items-center space-x-1 source py-1 text-sm"
-                  >
-                    <span className="truncate">{source.name}</span>
-                    <span className="hidden group-hover:inline-flex space-x-1">
-                      <PencilIcon className="h-4 text-primary-500 bg-primary-100 rounded-md p-0.5 hover:bg-primary-200" />
-                      <TrashIcon
-                        onClick={() => handleRemoveSource(source.name)}
-                        className="h-4 text-red-500 bg-red-100 rounded-md p-0.5 hover:bg-red-200"
-                      />
-                    </span>
-                  </li>
+                    source={source}
+                    onDelete={() => handleRemoveSource(source.name)}
+                    onEditName={(newName: string) =>
+                      handleEditSourceName(index, newName)
+                    }
+                  />
                 ))}
                 <li className="source">
                   <SourceForm onAddSource={handleAddSource} />
