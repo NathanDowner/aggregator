@@ -102,11 +102,11 @@ const MainDisplay: React.FC<MainDisplayProps> = ({ currentFeed }) => {
   }
 
   return (
-    <main className="bg-gray-100 flex-grow px-6 pt-24 ">
+    <main className="bg-gray-100 flex-grow px-6 pt-12 ">
       <div className="mb-6 text-gray-700">
         <div className="flex justify-between items-center">
           {/* Header */}
-          <h2 className="font-medium  text-3xl">
+          <h2 className="font-medium  text-2xl">
             {currentFeed.name ?? 'Your Feed'}
           </h2>
 
