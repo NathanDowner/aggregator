@@ -1,9 +1,10 @@
-import { Transition } from '@headlessui/react';
 import { PlusCircleIcon } from '@heroicons/react/solid';
 import { useState } from 'react';
 import { Feed } from '../models/feed.model';
+
 import Animations from './animations';
 import FeedComponent from './FeedComponent';
+import UserAuth from './UserAuth';
 
 type SideBarProps = {
   feeds: Feed[];
@@ -80,6 +81,9 @@ const SideBar: React.FC<SideBarProps> = ({
             </form>
           </Animations.AppearDown>
         </ul>
+
+        {/* Auth Section */}
+        <UserAuth />
       </div>
     </aside>
   );
