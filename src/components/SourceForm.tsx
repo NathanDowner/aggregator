@@ -25,7 +25,6 @@ const SourceForm: React.FC<Props> = ({ onAddSource }) => {
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(sourceName, url);
 
     if (sourceName.trim().length && url.trim().length) {
       setSourceName('');

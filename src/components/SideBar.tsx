@@ -38,7 +38,7 @@ const SideBar: React.FC<SideBarProps> = ({
 
   return (
     <aside className="sticky top-0 px-8 pt-12 flex-shrink-0 border-l h-screen w-72">
-      <h1 className="text-green-600 text-2xl">Aggregator</h1>
+      <h1 className="text-primary-600 text-3xl">Aggregator</h1>
 
       <div className="mt-8">
         <div className="flex justify-between items-center mb-1 pb-1 border-b">
