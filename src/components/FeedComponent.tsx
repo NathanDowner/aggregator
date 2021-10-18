@@ -1,7 +1,7 @@
 import { Disclosure } from '@headlessui/react';
-import { RssIcon, ChevronDownIcon } from '@heroicons/react/solid';
+import { RssIcon, ChevronDownIcon, PlusIcon } from '@heroicons/react/solid';
 import { useState } from 'react';
-import { Feed } from '../models/feed.model';
+import { Feed, Source } from '../models/feed.model';
 import Animations from './animations';
 import FeedSource from './FeedSource';
 import SourceForm from './SourceForm';
@@ -21,18 +21,30 @@ const FeedComponent = ({
 }: FeedComponentProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [updatedFeed, setUpdatedFeed] = useState<Feed>({ ...feed });
+  const [showAddSourceForm, setShowAddSourceForm] = useState(false);
 
-  const handleAddSource = (name: string, link: string) => {
-    const existingSource = updatedFeed.sources.find((src) => src.name === name);
+  const handleAddSource = (newSource: Source) => {
+    const existingSource = updatedFeed.sources.find(
+      (src) => src.name === newSource.name
+    );
 
     if (!existingSource) {
       setIsEditing(true);
       setUpdatedFeed((prev) => ({
         ...prev,
-        sources: [...prev.sources, { name, link }],
+        sources: [...prev.sources, newSource],
       }));
+      setShowAddSourceForm(false);
     }
   };
+
+  const handleCloseSourceForm = () => {
+    if (showAddSourceForm) {
+      setShowAddSourceForm(false);
+    }
+  };
+
+  const toggleShowInput = () => setShowAddSourceForm((prev) => !prev);
 
   const handleRemoveSource = (sourceName: string) => {
     setIsEditing(true);
@@ -42,12 +54,12 @@ const FeedComponent = ({
     }));
   };
 
-  const handleEditSourceName = (index: number, newName: string) => {
+  const handleEditSource = (index: number, updatedSource: Source) => {
     setIsEditing(true);
     setUpdatedFeed((prev) => ({
       ...prev,
       sources: prev.sources.map((src, idx) =>
-        idx === index ? { ...src, name: newName } : src
+        idx === index ? updatedSource : src
       ),
     }));
   };
@@ -102,13 +114,26 @@ const FeedComponent = ({
                     key={source.name}
                     source={source}
                     onDelete={() => handleRemoveSource(source.name)}
-                    onEditName={(newName: string) =>
-                      handleEditSourceName(index, newName)
+                    onEditSource={(updateSource: Source) =>
+                      handleEditSource(index, updateSource)
                     }
                   />
                 ))}
                 <li className="source">
-                  <SourceForm onAddSource={handleAddSource} />
+                  {showAddSourceForm ? (
+                    <SourceForm
+                      onAddSource={handleAddSource}
+                      onClose={handleCloseSourceForm}
+                    />
+                  ) : (
+                    <button
+                      onClick={toggleShowInput}
+                      className="flex items-center text-primary-500 rounded-md w-min px-2 py-1 hover:bg-blue-100 transform -translate-x-2 hover:translate-x-0 transition"
+                    >
+                      <PlusIcon className="h-4" />
+                      Add Source
+                    </button>
+                  )}
                 </li>
               </ul>
 
