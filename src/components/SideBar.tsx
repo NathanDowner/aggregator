@@ -38,10 +38,9 @@ const SideBar: React.FC<SideBarProps> = ({
   }
 
   return (
-    <aside className="sticky top-0 px-8 pt-12 flex-shrink-0 border-l h-screen w-72">
-      <h1 className="text-primary-600 text-3xl">Aggregator</h1>
-
-      <div className="mt-8">
+    <aside className="sticky top-0 pt-12 flex flex-col flex-shrink-0 border-l h-screen w-72">
+      <div className="px-8">
+        <h1 className="mb-8 text-primary-600 text-3xl">Aggregator</h1>
         <div className="flex justify-between items-center mb-1 pb-1 border-b">
           <h4 className="font-semibold text-lg">My Feeds</h4>
           <PlusCircleIcon
@@ -82,10 +81,10 @@ const SideBar: React.FC<SideBarProps> = ({
             </form>
           </Animations.AppearDown>
         </ul>
-
-        {/* Auth Section */}
-        <UserAuth />
       </div>
+
+      {/* Auth Section */}
+      <UserAuth />
     </aside>
   );
 };
