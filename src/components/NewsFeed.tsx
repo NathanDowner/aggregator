@@ -4,19 +4,28 @@ import Article from './Article';
 
 type NewsFeedProps = {
   articles: FeedArticle[];
+  feedHasSources: boolean;
 };
 
-const NewsFeed: React.FC<NewsFeedProps> = ({ articles }) => {
+const NewsFeed: React.FC<NewsFeedProps> = ({ articles, feedHasSources }) => {
   const breakpointColumnsObj = {
     950: 1,
     1360: 2,
     default: 3,
   };
 
-  if (articles.length === 0) {
+  if (!feedHasSources) {
     return (
       <div className="h-full text-gray-600">
         <p>Add Sources to view articles here!</p>
+      </div>
+    );
+  }
+
+  if (articles.length === 0) {
+    return (
+      <div className="h-full text-gray-600">
+        <p>No articles match your search.</p>
       </div>
     );
   }
