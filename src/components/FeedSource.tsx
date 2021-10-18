@@ -1,35 +1,37 @@
 import { PencilIcon, TrashIcon } from '@heroicons/react/solid';
 import React, { useState } from 'react';
 import { Source } from '../models/feed.model';
+import SourceForm from './SourceForm';
 
 type Props = {
   source: Source;
   onDelete: () => void;
-  onEditName: (newName: string) => void;
+  onEditSource: (newSource: Source) => void;
 };
 
-const FeedSource: React.FC<Props> = ({ source, onDelete, onEditName }) => {
+const FeedSource: React.FC<Props> = ({ source, onDelete, onEditSource }) => {
   const [isEditable, setIsEditable] = useState(false);
 
-  const handleNameUpdate = (ev: React.KeyboardEvent) => {
-    if (ev.key === 'Enter') {
-      setIsEditable(false);
-      const newName = (ev.target as Element).innerHTML.replace(/<br>/gi, '');
-      onEditName(newName);
-    }
+  const handleSourceUpdate = (updatedSource: Source) => {
+    onEditSource(updatedSource);
+    setIsEditable(false);
   };
+
+  const handleCloseForm = () => {
+    setIsEditable(false);
+  };
+
   return (
     <li className="group flex items-center space-x-1 source py-1 text-sm">
-      <span
-        className="truncate"
-        contentEditable={isEditable}
-        suppressContentEditableWarning={true}
-        onKeyPress={(event) => {
-          handleNameUpdate(event);
-        }}
-      >
-        {source.name}
-      </span>
+      {!isEditable ? (
+        <span className="truncate">{source.name}</span>
+      ) : (
+        <SourceForm
+          existingSource={source}
+          onClose={handleCloseForm}
+          onAddSource={handleSourceUpdate}
+        />
+      )}
       <span className="hidden group-hover:inline-flex space-x-1">
         {!isEditable && (
           <>
