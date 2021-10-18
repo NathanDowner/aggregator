@@ -1,8 +1,18 @@
 import { useSession, signIn, signOut } from 'next-auth/client';
+import { useEffect } from 'react';
 const UserAuth = () => {
-  const [session, authLoading] = useSession();
+  const [session, isAuthLoading] = useSession();
+
+  useEffect(() => {
+    if (session?.uid) {
+      localStorage.setItem('userId', session.uid);
+    } else {
+      localStorage.removeItem('userId');
+    }
+    return () => {};
+  }, [session]);
   return (
-    <div className="flex items-center self p-2 rounded-lg text-sm">
+    <div className=" flex items-center self p-2 rounded-lg text-sm">
       <div className="mr-2">
         {session ? (
           <img

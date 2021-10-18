@@ -19,8 +19,10 @@ type MainDisplayProps = {
   currentFeed: Feed;
 };
 
-function initializeFilters(sources: Source[]): SourceFilter[] {
-  return sources.map((src) => ({ source: { ...src }, isEnabled: true }));
+function initializeFilters(sources?: Source[]): SourceFilter[] {
+  return sources
+    ? sources.map((src) => ({ source: { ...src }, isEnabled: true }))
+    : [];
 }
 
 const MainDisplay: React.FC<MainDisplayProps> = ({ currentFeed }) => {
@@ -28,7 +30,7 @@ const MainDisplay: React.FC<MainDisplayProps> = ({ currentFeed }) => {
   const [articles, setArticles] = useState<FeedArticle[]>([]);
   const [rssFeeds, setRssFeeds] = useState<RSSBase[]>([]);
   const [filters, setFilters] = useState<SourceFilter[]>(() =>
-    initializeFilters(currentFeed.sources)
+    initializeFilters(currentFeed?.sources)
   );
 
   const [isUsingSearchFilter, setIsUsingSearchFilter] = useState(false);
@@ -47,8 +49,10 @@ const MainDisplay: React.FC<MainDisplayProps> = ({ currentFeed }) => {
   }, [filters]);
 
   useEffect(() => {
-    getFeeds(currentFeed.sources, applyData);
-    setFilters(initializeFilters(currentFeed.sources));
+    if (currentFeed) {
+      getFeeds(currentFeed.sources, applyData);
+      setFilters(initializeFilters(currentFeed.sources));
+    }
   }, [currentFeed, getFeeds]);
 
   function applyData(data: RSSBase[]) {
@@ -102,12 +106,12 @@ const MainDisplay: React.FC<MainDisplayProps> = ({ currentFeed }) => {
   }
 
   return (
-    <main className="bg-gray-100 flex-grow px-6 pt-12 ">
+    <main className="bg-gray-100 w-full flex flex-col px-6 pt-12 ">
       <div className="mb-6 text-gray-700">
         <div className="flex justify-between items-center">
           {/* Header */}
           <h2 className="font-medium  text-2xl">
-            {currentFeed.name ?? 'Your Feed'}
+            {currentFeed?.name ?? 'Your Feed'}
           </h2>
 
           <SearchBar onSearch={handleSearch} />
@@ -139,18 +143,20 @@ const MainDisplay: React.FC<MainDisplayProps> = ({ currentFeed }) => {
         </div>
       </div>
 
-      {isLoading ? (
-        <div>Loading ...</div>
-      ) : (
-        <>
-          {!error && (
-            <NewsFeed
-              articles={isUsingSearchFilter ? searchFilterItems : items}
-            />
-          )}
-          {error && <p>Error: {error}</p>}
-        </>
-      )}
+      <div className="flex-grow">
+        {isLoading ? (
+          <div>Loading ...</div>
+        ) : (
+          <>
+            {!error && (
+              <NewsFeed
+                articles={isUsingSearchFilter ? searchFilterItems : items}
+              />
+            )}
+            {error && <p>Error: {error}</p>}
+          </>
+        )}
+      </div>
     </main>
   );
 };

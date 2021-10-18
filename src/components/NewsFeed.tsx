@@ -13,6 +13,14 @@ const NewsFeed: React.FC<NewsFeedProps> = ({ articles }) => {
     default: 3,
   };
 
+  if (articles.length === 0) {
+    return (
+      <div className="h-full text-gray-600">
+        <p>Add Sources to view articles here!</p>
+      </div>
+    );
+  }
+
   return (
     // <div className="grid gap-4 grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
     <Masonry
