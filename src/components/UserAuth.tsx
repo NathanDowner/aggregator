@@ -12,7 +12,7 @@ const UserAuth = () => {
     return () => {};
   }, [session]);
   return (
-    <div className=" flex items-center self p-2 rounded-lg text-sm">
+    <div className="mt-auto mb-12 pl-8 bg-primary-100 flex items-center self p-2 text-sm">
       <div className="mr-2">
         {session ? (
           <img
