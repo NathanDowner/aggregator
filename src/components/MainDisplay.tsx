@@ -150,6 +150,7 @@ const MainDisplay: React.FC<MainDisplayProps> = ({ currentFeed }) => {
           <>
             {!error && (
               <NewsFeed
+                feedHasSources={Boolean(currentFeed?.sources)}
                 articles={isUsingSearchFilter ? searchFilterItems : items}
               />
             )}
