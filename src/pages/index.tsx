@@ -1,49 +1,52 @@
+import { Session } from 'next-auth';
+import { getSession, useSession } from 'next-auth/client';
 import Head from 'next/head';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { createFeed, getFeeds, getSampleFeeds, updateFeed } from '../api/feeds';
+import { fetchFeeds } from '../api/utils';
 import MainDisplay from '../components/MainDisplay';
 import SideBar from '../components/SideBar';
 import { Feed } from '../models/feed.model';
 
-export default function Home() {
-  const [activeFeedIndex, setActiveFeedIndex] = useState(0);
-  const [feeds, setFeeds] = useState<Feed[]>([
-    {
-      name: 'Tech News',
-      sources: [
-        { name: 'CNET', link: 'http://rss.cnn.com/rss/edition_technology.rss' },
-        { name: 'FPT', link: 'https://www.frontpagetech.com/feed/' },
-        { name: '9to5 Mac', link: 'https://9to5mac.com/feed/' },
-      ],
-    },
-    {
-      name: 'World News',
-      sources: [
-        { name: 'CNN', link: 'http://rss.cnn.com/rss/edition_world.rss' },
-      ],
-    },
-  ]);
+type Props = {
+  initFeeds: Feed[];
+};
 
-  function handleAddFeed(feedName: string) {
-    if (!feeds.find((f) => f.name === feedName)) {
+const Home: React.FC<Props> = ({ initFeeds }) => {
+  const [activeFeedIndex, setActiveFeedIndex] = useState(0);
+  const [feeds, setFeeds] = useState<Feed[]>(initFeeds);
+
+  async function handleAddFeed(feedName: string) {
+    const existingFeed = feeds.find((f) => f.name === feedName);
+    if (!existingFeed) {
       const newFeed: Feed = { name: feedName, sources: [] };
-      setFeeds((prev) => [...prev, newFeed]);
+      try {
+        const { name } = await createFeed(newFeed);
+        setFeeds((prev) => [...prev, { ...newFeed, id: name }]);
+      } catch (error) {
+        alert(error);
+      }
     }
   }
 
-  function handleUpdateFeed(feed: Feed) {
-    setFeeds((prev) => {
-      const feedIndex = feeds.findIndex(
-        (existingFeed) => existingFeed.name === feed.name
-      );
-
-      if (feedIndex !== -1) {
+  async function handleUpdateFeed(feed: Feed) {
+    const feedIndex = feeds.findIndex(
+      (existingFeed) => existingFeed.name === feed.name
+    );
+    if (feedIndex !== -1) {
+      try {
+        await updateFeed(feed);
+      } catch (error) {
+        alert(error);
+      }
+      setFeeds((prev) => {
         return [
           ...prev.slice(0, feedIndex),
           { ...feed },
           ...prev.slice(feedIndex + 1),
         ];
-      }
-    });
+      });
+    }
   }
 
   return (
@@ -62,6 +65,28 @@ export default function Home() {
       <MainDisplay currentFeed={feeds[activeFeedIndex]} />
     </div>
   );
+};
 
-  // TODO static/ server side render the feeds
+export default Home;
+export async function getServerSideProps({ req }) {
+  const session = await getSession({ req });
+  try {
+    const feeds = await fetchFeeds(session);
+    return {
+      props: {
+        initFeeds: Object.keys(feeds).map((k) => ({
+          ...feeds[k],
+          id: k,
+          sources: feeds[k].sources ?? [],
+        })),
+      },
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      props: {
+        initFeeds: [],
+      },
+    };
+  }
 }

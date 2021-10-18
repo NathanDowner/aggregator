@@ -28,6 +28,7 @@ const SideBar: React.FC<SideBarProps> = ({
     e.preventDefault();
     if (newFeedName.trim() !== '') {
       onAddFeed(newFeedName);
+      setShowAddFeedField(false);
       setNewFeedName('');
     }
   }
