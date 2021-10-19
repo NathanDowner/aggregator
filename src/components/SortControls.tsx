@@ -8,7 +8,7 @@ type SortControlsProps = {
 
 const SortControls: React.FC<SortControlsProps> = ({ sortConfig, onSort }) => {
   return (
-    <div className="flex items-center space-x-1 cursor-pointer">
+    <div className="flex items-center space-x-1 cursor-pointer ml-4">
       <div className="bg-white p-1 pl-2 rounded-l-full ">Date</div>
       <div className="bg-white p-1 pr-2 rounded-r-full ">
         <SortDescendingIcon

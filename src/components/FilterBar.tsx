@@ -8,7 +8,7 @@ type FilterBarProps = {
 
 const FilterBar: React.FC<FilterBarProps> = ({ filters, onToggleFilter }) => {
   return (
-    <div className="flex flex-grow space-x-4">
+    <div className="flex space-x-4 max-w-[calc(100%-78px)] overflow-x-scroll">
       {filters.map((filter, idx) => (
         <span
           onClick={() => onToggleFilter(idx)}
@@ -17,8 +17,10 @@ const FilterBar: React.FC<FilterBarProps> = ({ filters, onToggleFilter }) => {
             filter.isEnabled ? 'bg-white' : 'border'
           } cursor-pointer inline-flex items-center space-x-1 px-2 py-1 rounded-full `}
         >
-          {filter.isEnabled && <CheckCircleIcon className="h-3 " />}
-          <p key={filter.source.name} className="">
+          {filter.isEnabled && (
+            <CheckCircleIcon className="h-3 flex-shrink-0" />
+          )}
+          <p key={filter.source.name} className="whitespace-nowrap">
             {filter.source.name}
           </p>
         </span>
