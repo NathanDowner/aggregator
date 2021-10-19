@@ -64,7 +64,7 @@ const SourceForm: React.FC<Props> = ({
       </div>
       <button
         type="submit"
-        className="flex flex-1 items-center justify-center bg-primary-500 hover:bg-primary-600"
+        className="flex flex-1 items-center justify-center rounded-r-sm bg-primary-500 hover:bg-primary-600"
       >
         <CheckIcon className="text-white h-4 px-1" />
       </button>

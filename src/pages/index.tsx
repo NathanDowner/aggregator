@@ -1,7 +1,8 @@
+import { Transition } from '@headlessui/react';
 import { Session } from 'next-auth';
-import { getSession, useSession } from 'next-auth/client';
+import { getSession } from 'next-auth/client';
 import Head from 'next/head';
-import { useEffect, useRef, useState } from 'react';
+import { Fragment, useState } from 'react';
 import { createFeed, getFeeds, getSampleFeeds, updateFeed } from '../api/feeds';
 import { fetchFeeds } from '../api/utils';
 import MainDisplay from '../components/MainDisplay';
@@ -15,6 +16,7 @@ type Props = {
 const Home: React.FC<Props> = ({ initFeeds }) => {
   const [activeFeedIndex, setActiveFeedIndex] = useState(0);
   const [feeds, setFeeds] = useState<Feed[]>(initFeeds);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   async function handleAddFeed(feedName: string) {
     const existingFeed = feeds.find((f) => f.name === feedName);
@@ -49,8 +51,16 @@ const Home: React.FC<Props> = ({ initFeeds }) => {
     }
   }
 
+  const handleOpenDrawer = () => {
+    setIsDrawerOpen(true);
+  };
+
+  const handleCloseDrawer = () => {
+    setIsDrawerOpen(false);
+  };
+
   return (
-    <div className="flex min-h-full">
+    <div className="flex h-screen">
       <Head>
         <title>Aggregator</title>
         <link rel="icon" href="/favicon.ico" />
@@ -61,8 +71,28 @@ const Home: React.FC<Props> = ({ initFeeds }) => {
         setActiveFeed={setActiveFeedIndex}
         onAddFeed={handleAddFeed}
         onUpdateFeed={handleUpdateFeed}
+        isDrawerOpen={isDrawerOpen}
       />
-      <MainDisplay currentFeed={feeds[activeFeedIndex]} />
+      {/* Backdrop */}
+      <Transition
+        as={Fragment}
+        show={isDrawerOpen}
+        enter="transition-opacity"
+        enterFrom="opacity-0"
+        // enterTo="opacity-20"
+        leave="transition-opacity"
+        // leaveFrom="opacity-30"
+        leaveTo="opacity-0"
+      >
+        <div
+          onClick={handleCloseDrawer}
+          className="absolute z-10 top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.3)]"
+        />
+      </Transition>
+      <MainDisplay
+        currentFeed={feeds[activeFeedIndex]}
+        onOpenDrawer={handleOpenDrawer}
+      />
     </div>
   );
 };

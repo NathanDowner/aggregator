@@ -17,7 +17,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
 
   const clearText = () => setSearchTerm('');
   return (
-    <div className="flex items-center bg-white input shadow-sm focus-within:ring-2 focus-within:ring-primary-400">
+    <div className="flex items-center my-2 md:my-0 bg-white input shadow-sm focus-within:ring-2 focus-within:ring-primary-400">
       <SearchIcon className="h-4 mr-1 text-gray-400 flex-shrink-0" />
       <input
         type="text"
