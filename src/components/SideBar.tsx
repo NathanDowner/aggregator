@@ -12,6 +12,7 @@ type SideBarProps = {
   setActiveFeed: React.Dispatch<React.SetStateAction<number>>;
   onAddFeed: (feedName: string) => void;
   onUpdateFeed: (feed: Feed) => void;
+  isDrawerOpen: boolean;
 };
 
 const SideBar: React.FC<SideBarProps> = ({
@@ -20,6 +21,7 @@ const SideBar: React.FC<SideBarProps> = ({
   setActiveFeed,
   onAddFeed,
   onUpdateFeed,
+  isDrawerOpen,
 }) => {
   const [showAddFeedField, setShowAddFeedField] = useState(false);
   const [newFeedName, setNewFeedName] = useState('');
@@ -38,14 +40,18 @@ const SideBar: React.FC<SideBarProps> = ({
   }
 
   return (
-    <aside className="sticky top-0 pt-12 flex flex-col flex-shrink-0 border-l h-screen w-72">
-      <div className="px-8">
+    <aside
+      className={`top-0 pt-12 flex-shrink-0 bg-white border-l h-screen w-72 transform transition-transform absolute z-20 md:sticky md:translate-x-0 ${
+        !isDrawerOpen ? '-translate-x-full' : 'translate-x-0 '
+      }`}
+    >
+      <div className="px-8 h-full flex flex-col">
         <h1 className="mb-8 text-primary-600 text-3xl">Aggregator</h1>
         <div className="flex justify-between items-center mb-1 pb-1 border-b">
           <h4 className="font-semibold text-lg">My Feeds</h4>
           <PlusCircleIcon
             onClick={toggleShowAddFeedField}
-            className={`h-6 cursor-pointer ${
+            className={`h-6 cursor-pointer text-primary-500 ${
               showAddFeedField && 'rotate-45 text-red-400'
             } transition-transform`}
           />
@@ -81,10 +87,8 @@ const SideBar: React.FC<SideBarProps> = ({
             </form>
           </Animations.AppearDown>
         </ul>
+        <UserAuth />
       </div>
-
-      {/* Auth Section */}
-      <UserAuth />
     </aside>
   );
 };
