@@ -41,7 +41,7 @@ const SideBar: React.FC<SideBarProps> = ({
 
   return (
     <aside
-      className={`top-0 pt-12 flex-shrink-0 bg-white border-l h-screen w-72 transform transition-transform absolute z-20 md:sticky md:translate-x-0 ${
+      className={`top-0 pt-4 md:pt-12 flex-shrink-0 bg-white border-l h-screen w-72 transform transition-transform absolute z-20 md:sticky md:translate-x-0 ${
         !isDrawerOpen ? '-translate-x-full' : 'translate-x-0 '
       }`}
     >
