@@ -113,15 +113,15 @@ const MainDisplay: React.FC<MainDisplayProps> = ({
 
   return (
     <main className="bg-gray-100 w-full overflow-y-scroll flex flex-col md:pt-20">
-      <header className="sticky top-0 w-full p-4 bg-gray-100 shadow-md flex justify-between items-center md:hidden">
-        <h1 className="text-primary-600 text-3xl">Aggregator</h1>
+      <header className="sticky top-0 w-full p-4 bg-gray-100 shadow-md flex space-x-2 justify-start items-center md:hidden">
         <MenuIcon onClick={onOpenDrawer} className="h-8 text-gray-700" />
+        <h1 className="text-primary-600 text-3xl">Aggregator</h1>
       </header>
 
       <div className="mb-6 px-4 text-gray-700">
         <div className="flex flex-col md:flex-row md:justify-between md:items-center">
           {/* Header */}
-          <h2 className="font-medium text-2xl md:mb-0">
+          <h2 className="font-medium text-2xl mt-2 md:mt-0">
             {currentFeed?.name ?? 'Your Feed'}
           </h2>
 
