@@ -1,11 +1,11 @@
 import { databaseURL } from '../../firebase';
 import { Feed } from '../models/feed.model';
-import { getRequestBody, getUserId } from './utils';
+import { getRequestBody, getRequestBodyWithAuth, getUserId } from './utils';
 
 export const createFeed = async (feed: Feed) => {
   const resp = await fetch(
     `${databaseURL}/users/${getUserId()}/feeds.json`,
-    getRequestBody('POST', { ...feed })
+    getRequestBodyWithAuth('POST', { ...feed })
   );
   if (!resp.ok) {
     throw resp;
@@ -13,10 +13,10 @@ export const createFeed = async (feed: Feed) => {
   return resp.json();
 };
 
-export const getFeeds = async (userId?: string | number) => {
+export const getFeeds = async (token: string, userId?: string | number) => {
   const resp = await fetch(
     `${databaseURL}/users/${userId ?? getUserId()}/feeds.json`,
-    getRequestBody('GET')
+    getRequestBody('GET', null, { Authorization: `Bearer ${token}` })
   );
   if (!resp.ok) {
     throw resp;
@@ -38,7 +38,7 @@ export const getSampleFeeds = async () => {
 export const updateFeed = async ({ id, ...rest }: Feed) => {
   const resp = await fetch(
     `${databaseURL}/users/${getUserId()}/feeds/${id}.json`,
-    getRequestBody('PUT', { ...rest })
+    getRequestBodyWithAuth('PUT', { ...rest })
   );
   if (!resp.ok) {
     throw resp;
@@ -49,7 +49,7 @@ export const updateFeed = async ({ id, ...rest }: Feed) => {
 export const deleteFeed = async (id: string) => {
   const resp = await fetch(
     `${databaseURL}/users/${getUserId()}/feeds/feedName/${id}.json`,
-    getRequestBody('DELETE')
+    getRequestBodyWithAuth('DELETE')
   );
   if (!resp.ok) {
     throw resp;
