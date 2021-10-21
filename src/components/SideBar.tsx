@@ -41,12 +41,14 @@ const SideBar: React.FC<SideBarProps> = ({
 
   return (
     <aside
-      className={`top-0 pt-4 md:pt-12 flex-shrink-0 bg-white border-l h-screen w-72 transform transition-transform absolute z-20 md:sticky md:translate-x-0 ${
+      className={`top-0 pt-4 md:pt-8 flex-shrink-0 bg-white border-l h-screen w-72 transform transition-transform absolute z-20 md:sticky md:translate-x-0 ${
         !isDrawerOpen ? '-translate-x-full' : 'translate-x-0 '
       }`}
     >
       <div className="px-8 h-full flex flex-col">
-        <h1 className="mb-8 text-primary-600 text-3xl">Aggregator</h1>
+        <h1 className="mb-8 text-primary-600 font-medium text-3xl">
+          Aggregator
+        </h1>
         <div className="flex justify-between items-center mb-1 pb-1 border-b">
           <h4 className="font-semibold text-lg">My Feeds</h4>
           <PlusCircleIcon

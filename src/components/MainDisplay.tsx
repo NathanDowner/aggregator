@@ -112,7 +112,7 @@ const MainDisplay: React.FC<MainDisplayProps> = ({
   }
 
   return (
-    <main className="bg-gray-100 w-full overflow-y-scroll flex flex-col md:pt-20">
+    <main className="bg-gray-100 w-full overflow-y-scroll flex flex-col md:pt-8">
       <header className="sticky top-0 w-full p-4 bg-gray-100 shadow-md flex space-x-2 justify-start items-center md:hidden">
         <MenuIcon onClick={onOpenDrawer} className="h-8 text-gray-700" />
         <h1 className="text-primary-600 text-3xl">Aggregator</h1>
