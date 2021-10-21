@@ -8,7 +8,7 @@ type FilterBarProps = {
 
 const FilterBar: React.FC<FilterBarProps> = ({ filters, onToggleFilter }) => {
   return (
-    <div className="flex space-x-4 max-w-[calc(100%-78px)] overflow-x-scroll">
+    <div className="flex space-x-4 max-w-[calc(100%-78px)] overflow-x-auto">
       {filters.map((filter, idx) => (
         <span
           onClick={() => onToggleFilter(idx)}
