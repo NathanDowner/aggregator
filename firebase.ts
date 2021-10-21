@@ -24,7 +24,9 @@ const existingApps: FirebaseApp[] = getApps();
 const app = existingApps.length
   ? existingApps[0]
   : initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);
+// if (typeof window !== undefined) {
+//   const analytics = getAnalytics(app);
+// }
 
 const auth = getAuth(app);
 const databaseURL = firebaseConfig.databaseURL;

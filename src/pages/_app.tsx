@@ -1,9 +1,9 @@
+import AuthProvider from '../contexts/authContext';
 import '../styles/globals.css';
-import { Provider as AuthProvider } from 'next-auth/client';
 
-function MyApp({ Component, pageProps: { session, ...pageProps } }) {
+function MyApp({ Component, pageProps: { pageProps } }) {
   return (
-    <AuthProvider session={session}>
+    <AuthProvider>
       <Component {...pageProps} />
     </AuthProvider>
   );

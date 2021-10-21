@@ -1,32 +1,25 @@
-import { useSession, signIn, signOut } from 'next-auth/client';
-import { useEffect } from 'react';
+import { useAuth } from '../contexts/authContext';
 const UserAuth = () => {
-  const [session, isAuthLoading] = useSession();
+  const { signInWithGoogle, signOut, currentUser } = useAuth();
 
-  useEffect(() => {
-    if (session?.uid) {
-      localStorage.setItem('userId', session.uid);
-    } else {
-      localStorage.removeItem('userId');
-    }
-    return () => {};
-  }, [session]);
   return (
     <div className="mt-auto border-t flex items-center self p-2 text-sm md:mb-12">
       <div className="mr-2">
-        {session ? (
+        {currentUser ? (
           <img
-            src={session.user.image}
+            src={currentUser.photoURL}
             className="h-8 w-8 rounded-full"
-            alt={`${session.user.name}'s profile photo`}
+            alt={`${currentUser.displayName}'s profile photo`}
           />
         ) : (
           <div className="rounded-full h-8 w-8 bg-gray-100" />
         )}
       </div>
       <div>
-        <div className="">{session ? session.user.name : 'Guest User'}</div>
-        {session ? (
+        <div className="">
+          {currentUser ? currentUser.displayName : 'Guest User'}
+        </div>
+        {currentUser ? (
           <div
             onClick={() => signOut()}
             className="text-primary-500 cursor-pointer hover:underline"
@@ -35,7 +28,7 @@ const UserAuth = () => {
           </div>
         ) : (
           <div
-            onClick={() => signIn('google')}
+            onClick={signInWithGoogle}
             className="text-primary-500 cursor-pointer hover:underline"
           >
             Log in here

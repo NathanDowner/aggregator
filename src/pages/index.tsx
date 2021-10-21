@@ -1,22 +1,38 @@
 import { Transition } from '@headlessui/react';
-import { Session } from 'next-auth';
-import { getSession } from 'next-auth/client';
 import Head from 'next/head';
-import { Fragment, useState } from 'react';
-import { createFeed, getFeeds, getSampleFeeds, updateFeed } from '../api/feeds';
+import { Fragment, useEffect, useState } from 'react';
+import { createFeed, updateFeed } from '../api/feeds';
 import { fetchFeeds } from '../api/utils';
 import MainDisplay from '../components/MainDisplay';
 import SideBar from '../components/SideBar';
+import { useAuth } from '../contexts/authContext';
 import { Feed } from '../models/feed.model';
 
-type Props = {
-  initFeeds: Feed[];
-};
-
-const Home: React.FC<Props> = ({ initFeeds }) => {
+const Home: React.FC = () => {
   const [activeFeedIndex, setActiveFeedIndex] = useState(0);
-  const [feeds, setFeeds] = useState<Feed[]>(initFeeds);
+  const [feeds, setFeeds] = useState<Feed[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const { currentUser } = useAuth();
+
+  const getFeeds = async () => {
+    setIsLoading(true);
+    try {
+      const feeds = await fetchFeeds(currentUser);
+      setFeeds(feeds);
+    } catch (error) {
+      alert(error.error);
+    }
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    getFeeds();
+  }, []);
+
+  useEffect(() => {
+    getFeeds();
+  }, [currentUser]);
 
   async function handleAddFeed(feedName: string) {
     const existingFeed = feeds.find((f) => f.name === feedName);
@@ -26,7 +42,7 @@ const Home: React.FC<Props> = ({ initFeeds }) => {
         const { name } = await createFeed(newFeed);
         setFeeds((prev) => [...prev, { ...newFeed, id: name }]);
       } catch (error) {
-        alert(error);
+        alert(error.error);
       }
     }
   }
@@ -39,7 +55,7 @@ const Home: React.FC<Props> = ({ initFeeds }) => {
       try {
         await updateFeed(feed);
       } catch (error) {
-        alert(error);
+        alert(error.error);
       }
       setFeeds((prev) => {
         return [
@@ -65,58 +81,44 @@ const Home: React.FC<Props> = ({ initFeeds }) => {
         <title>Aggregator</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <SideBar
-        feeds={feeds}
-        activeFeedIndex={activeFeedIndex}
-        setActiveFeed={setActiveFeedIndex}
-        onAddFeed={handleAddFeed}
-        onUpdateFeed={handleUpdateFeed}
-        isDrawerOpen={isDrawerOpen}
-      />
-      {/* Backdrop */}
-      <Transition
-        as={Fragment}
-        show={isDrawerOpen}
-        enter="transition-opacity"
-        enterFrom="opacity-0"
-        // enterTo="opacity-20"
-        leave="transition-opacity"
-        // leaveFrom="opacity-30"
-        leaveTo="opacity-0"
-      >
-        <div
-          onClick={handleCloseDrawer}
-          className="absolute z-10 top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.3)]"
-        />
-      </Transition>
-      <MainDisplay
-        currentFeed={feeds[activeFeedIndex]}
-        onOpenDrawer={handleOpenDrawer}
-      />
+
+      {isLoading ? (
+        <div>Loading</div>
+      ) : (
+        <>
+          <SideBar
+            feeds={feeds}
+            activeFeedIndex={activeFeedIndex}
+            setActiveFeed={setActiveFeedIndex}
+            onAddFeed={handleAddFeed}
+            onUpdateFeed={handleUpdateFeed}
+            isDrawerOpen={isDrawerOpen}
+          />
+
+          {/* Backdrop */}
+          <Transition
+            as={Fragment}
+            show={isDrawerOpen}
+            enter="transition-opacity"
+            enterFrom="opacity-0"
+            enterTo="opacity-30"
+            leave="transition-opacity"
+            leaveFrom="opacity-30"
+            leaveTo="opacity-0"
+          >
+            <div
+              onClick={handleCloseDrawer}
+              className="absolute z-10 top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.3)]"
+            />
+          </Transition>
+          <MainDisplay
+            currentFeed={feeds[activeFeedIndex]}
+            onOpenDrawer={handleOpenDrawer}
+          />
+        </>
+      )}
     </div>
   );
 };
 
 export default Home;
-export async function getServerSideProps({ req }) {
-  const session = await getSession({ req });
-  try {
-    const feeds = await fetchFeeds(session);
-    return {
-      props: {
-        initFeeds: Object.keys(feeds).map((k) => ({
-          ...feeds[k],
-          id: k,
-          sources: feeds[k].sources ?? [],
-        })),
-      },
-    };
-  } catch (error) {
-    console.log(error);
-    return {
-      props: {
-        initFeeds: [],
-      },
-    };
-  }
-}
