@@ -1,8 +1,8 @@
-import { Transition } from '@headlessui/react';
 import Head from 'next/head';
-import { Fragment, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createFeed, updateFeed } from '../api/feeds';
 import { fetchFeeds } from '../api/utils';
+import Animations from '../components/animations';
 import MainDisplay from '../components/MainDisplay';
 import SideBar from '../components/SideBar';
 import { useAuth } from '../contexts/authContext';
@@ -96,21 +96,13 @@ const Home: React.FC = () => {
           />
 
           {/* Backdrop */}
-          <Transition
-            as={Fragment}
-            show={isDrawerOpen}
-            enter="transition-opacity"
-            enterFrom="opacity-0"
-            enterTo="opacity-30"
-            leave="transition-opacity"
-            leaveFrom="opacity-30"
-            leaveTo="opacity-0"
-          >
+          <Animations.FadeIn reveal={isDrawerOpen}>
             <div
               onClick={handleCloseDrawer}
               className="absolute z-10 top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.3)]"
             />
-          </Transition>
+          </Animations.FadeIn>
+
           <MainDisplay
             currentFeed={feeds[activeFeedIndex]}
             onOpenDrawer={handleOpenDrawer}
