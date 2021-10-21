@@ -1,4 +1,4 @@
-import { Session } from 'next-auth';
+import { User } from '@firebase/auth';
 import { Feed } from '../models/feed.model';
 import { getFeeds, getSampleFeeds } from './feeds';
 
@@ -30,12 +30,18 @@ export function getRequestBodyWithAuth(
 }
 
 export function getUserId() {
-  return localStorage.getItem('userId');
+  return localStorage.getItem('uid');
 }
 
-export async function fetchFeeds(session?: Session): Promise<Feed[]> {
-  const feeds = session
-    ? await getFeeds(session.accessToken, session.uid)
-    : await getSampleFeeds();
-  return Object.keys(feeds).map((key) => feeds[key]);
+export async function fetchFeeds(currentUser?: User): Promise<Feed[]> {
+  const feeds = currentUser ? await getFeeds() : await getSampleFeeds();
+  return feeds // check if the user has no feeds
+    ? Object.keys(feeds).map(
+        (key): Feed => ({
+          ...feeds[key],
+          id: key,
+          sources: feeds[key].sources ?? [],
+        })
+      )
+    : [];
 }

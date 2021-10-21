@@ -13,10 +13,10 @@ export const createFeed = async (feed: Feed) => {
   return resp.json();
 };
 
-export const getFeeds = async (token: string, userId?: string | number) => {
+export const getFeeds = async () => {
   const resp = await fetch(
-    `${databaseURL}/users/${userId ?? getUserId()}/feeds.json`,
-    getRequestBody('GET', null, { Authorization: `Bearer ${token}` })
+    `${databaseURL}/users/${getUserId()}/feeds.json`,
+    getRequestBodyWithAuth('GET')
   );
   if (!resp.ok) {
     throw resp;
