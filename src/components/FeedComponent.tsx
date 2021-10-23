@@ -1,6 +1,7 @@
 import { Disclosure } from '@headlessui/react';
 import { RssIcon, ChevronDownIcon, PlusIcon } from '@heroicons/react/solid';
 import { useState } from 'react';
+import { useAuth } from '../contexts/authContext';
 import { Feed, Source } from '../models/feed.model';
 import Animations from './animations';
 import FeedSource from './FeedSource';
@@ -22,6 +23,7 @@ const FeedComponent = ({
   const [isEditing, setIsEditing] = useState(false);
   const [updatedFeed, setUpdatedFeed] = useState<Feed>({ ...feed });
   const [showAddSourceForm, setShowAddSourceForm] = useState(false);
+  const { currentUser } = useAuth();
 
   const handleAddSource = (newSource: Source) => {
     const existingSource = updatedFeed.sources.find(
@@ -119,22 +121,24 @@ const FeedComponent = ({
                     }
                   />
                 ))}
-                <li className="source">
-                  {showAddSourceForm ? (
-                    <SourceForm
-                      onAddSource={handleAddSource}
-                      onClose={handleCloseSourceForm}
-                    />
-                  ) : (
-                    <button
-                      onClick={toggleShowInput}
-                      className="flex items-center text-primary-500 rounded-md w-min px-2 py-1 hover:bg-blue-100 transform -translate-x-2 hover:translate-x-0 transition"
-                    >
-                      <PlusIcon className="h-4" />
-                      Add Source
-                    </button>
-                  )}
-                </li>
+                {currentUser && (
+                  <li className="source">
+                    {showAddSourceForm ? (
+                      <SourceForm
+                        onAddSource={handleAddSource}
+                        onClose={handleCloseSourceForm}
+                      />
+                    ) : (
+                      <button
+                        onClick={toggleShowInput}
+                        className="flex items-center text-primary-500 rounded-md w-min px-2 py-1 hover:bg-blue-100 transform -translate-x-2 hover:translate-x-0 transition"
+                      >
+                        <PlusIcon className="h-4" />
+                        Add Source
+                      </button>
+                    )}
+                  </li>
+                )}
               </ul>
 
               {/* Button Row */}
