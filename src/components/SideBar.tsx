@@ -1,5 +1,6 @@
 import { PlusCircleIcon } from '@heroicons/react/solid';
 import { useState } from 'react';
+import { useAuth } from '../contexts/authContext';
 import { Feed } from '../models/feed.model';
 
 import Animations from './animations';
@@ -25,6 +26,7 @@ const SideBar: React.FC<SideBarProps> = ({
 }) => {
   const [showAddFeedField, setShowAddFeedField] = useState(false);
   const [newFeedName, setNewFeedName] = useState('');
+  const { currentUser } = useAuth();
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -50,13 +52,17 @@ const SideBar: React.FC<SideBarProps> = ({
           Aggregator
         </h1>
         <div className="flex justify-between items-center mb-1 pb-1 border-b">
-          <h4 className="font-semibold text-lg">My Feeds</h4>
-          <PlusCircleIcon
-            onClick={toggleShowAddFeedField}
-            className={`h-6 cursor-pointer text-primary-500 ${
-              showAddFeedField && 'rotate-45 text-red-400'
-            } transition-transform`}
-          />
+          <h4 className="font-semibold text-lg">
+            {currentUser ? 'My Feeds' : 'Sample Feeds'}
+          </h4>
+          {currentUser && (
+            <PlusCircleIcon
+              onClick={toggleShowAddFeedField}
+              className={`h-6 cursor-pointer text-primary-500 ${
+                showAddFeedField && 'rotate-45 text-red-400'
+              } transition-transform`}
+            />
+          )}
         </div>
         <ul>
           {feeds.map((feed, index) => (

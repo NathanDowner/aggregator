@@ -1,5 +1,6 @@
 import { PencilIcon, TrashIcon } from '@heroicons/react/solid';
 import React, { useState } from 'react';
+import { useAuth } from '../contexts/authContext';
 import { Source } from '../models/feed.model';
 import SourceForm from './SourceForm';
 
@@ -11,6 +12,7 @@ type Props = {
 
 const FeedSource: React.FC<Props> = ({ source, onDelete, onEditSource }) => {
   const [isEditable, setIsEditable] = useState(false);
+  const { currentUser } = useAuth();
 
   const handleSourceUpdate = (updatedSource: Source) => {
     onEditSource(updatedSource);
@@ -33,7 +35,7 @@ const FeedSource: React.FC<Props> = ({ source, onDelete, onEditSource }) => {
         />
       )}
       <span className="hidden group-hover:inline-flex space-x-1">
-        {!isEditable && (
+        {!isEditable && currentUser && (
           <>
             <PencilIcon
               onClick={() => setIsEditable(true)}
