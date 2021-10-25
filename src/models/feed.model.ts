@@ -11,6 +11,7 @@ export interface Source {
 
 export type SourceFilter = {
   source: Source;
+  rssFeedTitle?: string;
   isEnabled: boolean;
 };
 
@@ -37,14 +38,14 @@ export interface FeedImage {
 }
 
 export interface RSSBase {
-  description: string;
-  feedUrl: string;
-  generator: string;
-  image: FeedImage;
-  items: FeedArticle[];
-  language: string;
-  lastBuildDate: string;
-  link: string;
-  paginationLinks: { self: string };
   title: string;
+  description: string;
+  link: string;
+  items: FeedArticle[];
+  feedUrl?: string;
+  generator?: string;
+  image?: FeedImage;
+  language?: string;
+  lastBuildDate?: string;
+  paginationLinks?: { self: string };
 }
