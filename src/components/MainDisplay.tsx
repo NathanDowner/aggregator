@@ -64,7 +64,12 @@ const MainDisplay: React.FC<MainDisplayProps> = ({
   function applyData(data: RSSBase[]) {
     setRssFeeds(data);
     let items: FeedArticle[] = [];
-    data.forEach((feed) => {
+    data.forEach((feed, index) => {
+      setFilters((prev) =>
+        prev.map<SourceFilter>((filter, idx) =>
+          index === idx ? { ...filter, rssFeedTitle: feed.title } : filter
+        )
+      );
       items = items.concat(feed.items);
     });
     setArticles(items);
@@ -78,7 +83,7 @@ const MainDisplay: React.FC<MainDisplayProps> = ({
     rssFeeds.forEach((feed) => {
       for (const filter of filters) {
         if (
-          compareFeedUrls(filter.source.link, feed.feedUrl) &&
+          compareFeedUrls(filter.rssFeedTitle, feed.title) &&
           filter.isEnabled
         ) {
           filteredFeeds = filteredFeeds.concat(feed.items);
@@ -112,15 +117,15 @@ const MainDisplay: React.FC<MainDisplayProps> = ({
   }
 
   return (
-    <main className="bg-gray-100 w-full overflow-y-scroll flex flex-col md:pt-8">
+    <main className="bg-gray-100 w-full flex flex-col md:pt-8">
       <header className="sticky top-0 w-full p-4 bg-gray-100 shadow-md flex space-x-2 justify-start items-center md:hidden">
         <MenuIcon onClick={onOpenDrawer} className="h-8 text-gray-700" />
         <h1 className="text-primary-600 text-3xl">Aggregator</h1>
       </header>
 
+      {/* Header */}
       <div className="mb-6 px-4 text-gray-700">
         <div className="flex flex-col md:flex-row md:justify-between md:items-center">
-          {/* Header */}
           <h2 className="font-medium text-2xl mt-2 md:mt-0">
             {currentFeed?.name ?? 'Your Feed'}
           </h2>
@@ -141,6 +146,8 @@ const MainDisplay: React.FC<MainDisplayProps> = ({
           </h4>
         )}
       </div>
+
+      {/* Filter and Sort */}
 
       <div className="px-4 text-gray-400 text-sm mb-4">
         <div className="flex justify-between font-medium text-gray-500 mb-2">
