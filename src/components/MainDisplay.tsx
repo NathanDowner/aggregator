@@ -82,10 +82,7 @@ const MainDisplay: React.FC<MainDisplayProps> = ({
     let filteredFeeds: FeedArticle[] = [];
     rssFeeds.forEach((feed) => {
       for (const filter of filters) {
-        if (
-          compareFeedUrls(filter.rssFeedTitle, feed.title) &&
-          filter.isEnabled
-        ) {
+        if (filter.rssFeedTitle === feed.title && filter.isEnabled) {
           filteredFeeds = filteredFeeds.concat(feed.items);
         }
       }
