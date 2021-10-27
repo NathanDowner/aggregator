@@ -2,6 +2,7 @@ import {
   getRedirectResult,
   GoogleAuthProvider,
   onAuthStateChanged,
+  signInWithPopup,
   signInWithRedirect,
   signOut as logOut,
   User,
@@ -13,26 +14,25 @@ type AuthContextType = {
   signInWithGoogle: () => void;
   signOut: () => void;
   currentUser: User;
+  isAuthLoading: boolean;
 };
 
 const AuthContext = createContext<AuthContextType>(null);
 
 const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<User>(null);
+  const [isAuthLoading, setIsAuthLoading] = useState(false);
 
   async function signInWithGoogle() {
     const provider = new GoogleAuthProvider();
-    // provider.addScope('https://www.googleapis.com/auth/userinfo.email');
+    provider.addScope('https://www.googleapis.com/auth/userinfo.email');
 
     try {
-      signInWithRedirect(auth, provider);
-      const result = await getRedirectResult(auth);
+      const result = await signInWithPopup(auth, provider);
       const user = result.user;
       const credential = GoogleAuthProvider.credentialFromResult(result);
-      const token = credential.accessToken;
-      localStorage.setItem('accessToken', token);
+      localStorage.setItem('accessToken', credential.accessToken);
       localStorage.setItem('uid', user.uid);
-      console.log(result);
     } catch (error) {
       console.log(error);
       const errorCode = error.code;
@@ -43,21 +43,21 @@ const AuthProvider = ({ children }) => {
   async function signOut() {
     try {
       await logOut(auth);
-      // setCurrentUser(null);
-      // localStorage.removeItem('accessToken')
-      // localStorage.removeItem('uid')
     } catch (error) {}
   }
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user: User) => {
+      setIsAuthLoading(true);
       if (user) {
+        localStorage.setItem('uid', user.uid);
         setCurrentUser(user);
       } else {
         setCurrentUser(null);
         localStorage.removeItem('uid');
         localStorage.removeItem('accessToken');
       }
+      setIsAuthLoading(false);
     });
 
     return () => {
@@ -65,7 +65,12 @@ const AuthProvider = ({ children }) => {
     };
   }, [auth]);
 
-  const value = { signInWithGoogle, signOut, currentUser };
+  const value = {
+    signInWithGoogle,
+    signOut,
+    currentUser,
+    isAuthLoading,
+  };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 

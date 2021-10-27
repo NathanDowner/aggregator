@@ -11,24 +11,17 @@ import { Feed } from '../models/feed.model';
 const Home: React.FC = () => {
   const [activeFeedIndex, setActiveFeedIndex] = useState(0);
   const [feeds, setFeeds] = useState<Feed[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const { currentUser } = useAuth();
+  const { currentUser, isAuthLoading } = useAuth();
 
   const getFeeds = async () => {
-    setIsLoading(true);
     try {
       const feeds = await fetchFeeds(currentUser);
       setFeeds(feeds);
     } catch (error) {
       alert(error.error);
     }
-    setIsLoading(false);
   };
-
-  useEffect(() => {
-    getFeeds();
-  }, []);
 
   useEffect(() => {
     getFeeds();
@@ -76,13 +69,13 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex min-h-screen">
       <Head>
         <title>Aggregator</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {isLoading ? (
+      {isAuthLoading ? (
         <div>Loading</div>
       ) : (
         <>
