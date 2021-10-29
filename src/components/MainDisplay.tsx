@@ -102,7 +102,9 @@ const MainDisplay: React.FC<MainDisplayProps> = ({
     console.log(searchTerm);
     if (searchTerm.length) {
       const filteredItems = items.filter((article) =>
-        article.title.toLowerCase().includes(searchTerm.trim())
+        article.title
+          .toLowerCase()
+          .includes(searchTerm.trim().toLocaleLowerCase())
       );
 
       setSearchFilterItems(filteredItems);
