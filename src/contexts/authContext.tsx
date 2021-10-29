@@ -28,16 +28,19 @@ const AuthProvider = ({ children }) => {
     provider.addScope('https://www.googleapis.com/auth/userinfo.email');
 
     try {
+      setIsAuthLoading(true);
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       const credential = GoogleAuthProvider.credentialFromResult(result);
       localStorage.setItem('accessToken', credential.accessToken);
       localStorage.setItem('uid', user.uid);
+      setCurrentUser(user);
     } catch (error) {
       console.log(error);
       const errorCode = error.code;
       const errorMessage = error.message;
     }
+    setIsAuthLoading(false);
   }
 
   async function signOut() {
@@ -48,16 +51,16 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user: User) => {
-      setIsAuthLoading(true);
-      if (user) {
-        localStorage.setItem('uid', user.uid);
-        setCurrentUser(user);
-      } else {
-        setCurrentUser(null);
-        localStorage.removeItem('uid');
-        localStorage.removeItem('accessToken');
+      if (!isAuthLoading) {
+        if (user) {
+          localStorage.setItem('uid', user.uid);
+          setCurrentUser(user);
+        } else {
+          setCurrentUser(null);
+          localStorage.removeItem('uid');
+          localStorage.removeItem('accessToken');
+        }
       }
-      setIsAuthLoading(false);
     });
 
     return () => {
