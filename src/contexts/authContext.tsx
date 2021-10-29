@@ -9,6 +9,7 @@ import {
 } from '@firebase/auth';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { auth } from '../../firebase';
+import { useNotification } from './notificationContext';
 
 type AuthContextType = {
   signInWithGoogle: () => void;
@@ -22,6 +23,7 @@ const AuthContext = createContext<AuthContextType>(null);
 const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<User>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(false);
+  const { notifySuccess, notifyError } = useNotification();
 
   async function signInWithGoogle() {
     const provider = new GoogleAuthProvider();
@@ -34,11 +36,13 @@ const AuthProvider = ({ children }) => {
       const credential = GoogleAuthProvider.credentialFromResult(result);
       localStorage.setItem('accessToken', credential.accessToken);
       localStorage.setItem('uid', user.uid);
+      notifySuccess('Successfully logged in!');
       setCurrentUser(user);
     } catch (error) {
       console.log(error);
       const errorCode = error.code;
       const errorMessage = error.message;
+      notifyError('Login failed.');
     }
     setIsAuthLoading(false);
   }
@@ -46,6 +50,7 @@ const AuthProvider = ({ children }) => {
   async function signOut() {
     try {
       await logOut(auth);
+      notifySuccess('Successfully logged out!');
     } catch (error) {}
   }
 

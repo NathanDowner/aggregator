@@ -1,5 +1,7 @@
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 import { createFeed, updateFeed } from '../api/feeds';
 import { fetchFeeds } from '../api/utils';
 import Animations from '../components/animations';
@@ -7,19 +9,21 @@ import MainDisplay from '../components/MainDisplay';
 import SideBar from '../components/SideBar';
 import { useAuth } from '../contexts/authContext';
 import { Feed } from '../models/feed.model';
+import { useNotification } from '../contexts/notificationContext';
 
 const Home: React.FC = () => {
   const [activeFeedIndex, setActiveFeedIndex] = useState(0);
   const [feeds, setFeeds] = useState<Feed[]>([]);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const { currentUser, isAuthLoading } = useAuth();
+  const { notifyError, notifySuccess } = useNotification();
 
   const getFeeds = async () => {
     try {
       const feeds = await fetchFeeds(currentUser);
       setFeeds(feeds);
     } catch (error) {
-      alert(error.error);
+      notifyError(error.error);
     }
   };
 
@@ -33,9 +37,10 @@ const Home: React.FC = () => {
       const newFeed: Feed = { name: feedName, sources: [] };
       try {
         const { name } = await createFeed(newFeed);
+        notifySuccess('Created feed successfully!');
         setFeeds((prev) => [...prev, { ...newFeed, id: name }]);
       } catch (error) {
-        alert(error.error);
+        notifyError(error.error);
       }
     }
   }
@@ -47,8 +52,9 @@ const Home: React.FC = () => {
     if (feedIndex !== -1) {
       try {
         await updateFeed(feed);
+        notifySuccess('Updated feed successfully!');
       } catch (error) {
-        alert(error.error);
+        notifyError(error.error);
       }
       setFeeds((prev) => {
         return [
@@ -102,6 +108,7 @@ const Home: React.FC = () => {
           />
         </>
       )}
+      <ToastContainer />
     </div>
   );
 };
