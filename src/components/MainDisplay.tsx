@@ -9,7 +9,6 @@ import {
   Source,
   SourceFilter,
 } from '../models/feed.model';
-import { compareFeedUrls } from '../utils';
 import FilterBar from './FilterBar';
 import NewsFeed from './NewsFeed';
 import SearchBar from './SearchBar';
