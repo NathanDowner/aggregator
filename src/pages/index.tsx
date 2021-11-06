@@ -81,33 +81,29 @@ const Home: React.FC = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {isAuthLoading ? (
-        <div>Loading</div>
-      ) : (
-        <>
-          <SideBar
-            feeds={feeds}
-            activeFeedIndex={activeFeedIndex}
-            setActiveFeed={setActiveFeedIndex}
-            onAddFeed={handleAddFeed}
-            onUpdateFeed={handleUpdateFeed}
-            isDrawerOpen={isDrawerOpen}
-          />
+      <>
+        <SideBar
+          feeds={feeds}
+          activeFeedIndex={activeFeedIndex}
+          setActiveFeed={setActiveFeedIndex}
+          onAddFeed={handleAddFeed}
+          onUpdateFeed={handleUpdateFeed}
+          isDrawerOpen={isDrawerOpen}
+        />
 
-          {/* Backdrop */}
-          <Animations.FadeIn reveal={isDrawerOpen}>
-            <div
-              onClick={handleCloseDrawer}
-              className="absolute z-10 top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.3)]"
-            />
-          </Animations.FadeIn>
-
-          <MainDisplay
-            currentFeed={feeds[activeFeedIndex]}
-            onOpenDrawer={handleOpenDrawer}
+        {/* Backdrop */}
+        <Animations.FadeIn reveal={isDrawerOpen}>
+          <div
+            onClick={handleCloseDrawer}
+            className="absolute z-10 top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.3)]"
           />
-        </>
-      )}
+        </Animations.FadeIn>
+
+        <MainDisplay
+          currentFeed={feeds[activeFeedIndex]}
+          onOpenDrawer={handleOpenDrawer}
+        />
+      </>
       <ToastContainer />
     </div>
   );
