@@ -32,6 +32,9 @@ const MainDisplay: React.FC<MainDisplayProps> = ({
 }) => {
   const { isLoading, error, getFeeds } = useGetFeeds<RSSBase>();
   const [articles, setArticles] = useState<FeedArticle[]>([]);
+  const [sourceFeeds, setSourceFeeds] = useState<{
+    [feedTitle: string]: RSSBase[];
+  }>({});
   const [rssFeeds, setRssFeeds] = useState<RSSBase[]>([]);
   const [filters, setFilters] = useState<SourceFilter[]>(() =>
     initializeFilters(currentFeed?.sources)
@@ -45,34 +48,58 @@ const MainDisplay: React.FC<MainDisplayProps> = ({
     { direction: 'descending', key: 'isoDate' }
   );
 
-  const [pageHasScrolled, setPageHasScrolled] = useState(false);
-
   useEffect(() => {
-    if (!isLoading) {
-      const filteredArticles = getFilteredFeeds(rssFeeds, filters);
+    if (currentFeed) {
+      const filteredArticles = getFilteredFeeds(
+        sourceFeeds[currentFeed.name] ?? [],
+        filters
+      );
       setArticles(filteredArticles);
     }
   }, [filters]);
 
   useEffect(() => {
-    if (currentFeed) {
-      getFeeds(currentFeed.sources, applyData);
-      setFilters(initializeFilters(currentFeed.sources));
-    }
+    (async () => {
+      if (currentFeed) {
+        if (!sourceFeeds.hasOwnProperty(currentFeed.name)) {
+          await getFeeds(currentFeed.sources, applyData);
+        } else {
+          setFilters(
+            addFeedTitle(
+              sourceFeeds[currentFeed.name],
+              initializeFilters(currentFeed.sources)
+            )
+          );
+        }
+      }
+    })();
   }, [currentFeed, getFeeds]);
 
-  function applyData(data: RSSBase[]) {
-    setRssFeeds(data);
+  function extractFeedArticles(data: RSSBase[]): FeedArticle[] {
     let items: FeedArticle[] = [];
-    data.forEach((feed, index) => {
-      setFilters((prev) =>
-        prev.map<SourceFilter>((filter, idx) =>
-          index === idx ? { ...filter, rssFeedTitle: feed.title } : filter
-        )
-      );
+    data.forEach((feed) => {
       items = items.concat(feed.items);
     });
-    setArticles(items);
+    return items;
+  }
+
+  function addFeedTitle(
+    sources: RSSBase[],
+    filtersWithoutTitles: SourceFilter[]
+  ): SourceFilter[] {
+    const updatedFilters: SourceFilter[] = [...filtersWithoutTitles];
+    sources.forEach((feed, index) => {
+      updatedFilters[index].rssFeedTitle = feed.title;
+    });
+    return updatedFilters;
+  }
+
+  function applyData(data: RSSBase[]) {
+    setSourceFeeds((prev) => ({ ...prev, [currentFeed.name]: data }));
+
+    setFilters((prev) =>
+      addFeedTitle(data, initializeFilters(currentFeed.sources))
+    );
   }
 
   function getFilteredFeeds(
@@ -80,14 +107,12 @@ const MainDisplay: React.FC<MainDisplayProps> = ({
     filters: SourceFilter[]
   ): FeedArticle[] {
     let filteredFeeds: FeedArticle[] = [];
-    rssFeeds.forEach((feed) => {
-      for (const filter of filters) {
-        if (filter.rssFeedTitle === feed.title && filter.isEnabled) {
-          filteredFeeds = filteredFeeds.concat(feed.items);
-        }
-      }
-    });
-    return filteredFeeds;
+    const enabledFeeds = rssFeeds.filter(
+      (feed) =>
+        filters.find((filter) => filter.rssFeedTitle === feed.title).isEnabled
+    );
+
+    return extractFeedArticles(enabledFeeds);
   }
 
   function handleToggleFilter(index: number) {
