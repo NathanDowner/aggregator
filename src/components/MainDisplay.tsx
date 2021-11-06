@@ -1,4 +1,5 @@
 import { MenuIcon } from '@heroicons/react/solid';
+import { RefreshIcon } from '@heroicons/react/outline';
 import React, { useEffect, useState } from 'react';
 import useGetFeeds from '../hooks/useGetFeeds';
 import useSortableData from '../hooks/useSortableData';
@@ -114,6 +115,10 @@ const MainDisplay: React.FC<MainDisplayProps> = ({
     return extractFeedArticles(enabledFeeds);
   }
 
+  async function refreshFeed() {
+    await getFeeds(currentFeed.sources, applyData);
+  }
+
   function handleToggleFilter(index: number) {
     setFilters((previousFilters) =>
       previousFilters.map((prev, idx) =>
@@ -149,9 +154,15 @@ const MainDisplay: React.FC<MainDisplayProps> = ({
       {/* Header */}
       <div className="mb-6 px-4 text-gray-700">
         <div className="flex flex-col md:flex-row md:justify-between md:items-center">
-          <h2 className="font-medium text-2xl mt-2 md:mt-0">
-            {currentFeed?.name ?? 'Your Feed'}
-          </h2>
+          <div className="flex items-center">
+            <h2 className="font-medium text-2xl mt-2 md:mt-0">
+              {currentFeed?.name ?? 'Your Feed'}{' '}
+            </h2>
+            <RefreshIcon
+              onClick={refreshFeed}
+              className=" h-6 ml-2 bg-primary-500 text-white p-1 rounded-full cursor-pointer transition-transform hover:-rotate-45 "
+            />
+          </div>
 
           <SearchBar onSearch={handleSearch} />
         </div>
