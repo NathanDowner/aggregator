@@ -4,10 +4,17 @@ import { SourceFilter } from '../models/feed.model';
 type FilterBarProps = {
   onToggleFilter: (index: number) => void;
   filters: SourceFilter[];
+  isLoading: boolean;
 };
 
-const FilterBar: React.FC<FilterBarProps> = ({ filters, onToggleFilter }) => {
-  return (
+const FilterBar: React.FC<FilterBarProps> = ({
+  filters,
+  onToggleFilter,
+  isLoading,
+}) => {
+  return isLoading ? (
+    <div>Loading...</div>
+  ) : (
     <div className="flex space-x-4 max-w-[calc(100%-78px)] overflow-x-auto">
       {filters.map((filter, idx) => (
         <span

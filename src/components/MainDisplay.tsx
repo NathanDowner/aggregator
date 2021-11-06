@@ -178,7 +178,11 @@ const MainDisplay: React.FC<MainDisplayProps> = ({
           <h4 className="">Sort</h4>
         </div>
         <div className="flex justify-between">
-          <FilterBar filters={filters} onToggleFilter={handleToggleFilter} />
+          <FilterBar
+            isLoading={isLoading}
+            filters={filters}
+            onToggleFilter={handleToggleFilter}
+          />
 
           <SortControls onSort={requestSort} sortConfig={sortConfig} />
         </div>
