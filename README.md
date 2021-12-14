@@ -173,7 +173,7 @@ Distributed under the MIT License.
 <!-- CONTACT -->
 ## Contact
 
-Nathan Downer - [@Nathan_Downer]https://twitter.com/Nathan_Downer) - nathandowner123@gmail.com
+Nathan Downer - [@Nathan_Downer](https://twitter.com/Nathan_Downer) - nathandowner123@gmail.com
 
 Project Link: [https://github.com/NathanDowner/aggregator](https://github.com/NathanDowner/aggregator)
 
