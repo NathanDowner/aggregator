@@ -64,7 +64,7 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-This project was initially inspired by a challene I saw somewhere on the internet a while back. I actually began building it however, when I was tracking news about a particular country across multiple sources, and decided it would be a lot easier to have feeds from those sources all in one place to go through. It is the first of many more projects to be added to my github in an attempt to make sure I have work to show for myself apart from projects built for my employers.
+This project was initially inspired by a challenge I saw somewhere on the internet a while back. I actually began building it however, when I was tracking news about a particular country across multiple sources, and decided it would be a lot easier to have feeds from those sources all in one place to go through. It is the first of many more projects to be added to my github in an attempt to make sure I have work to show for myself apart from projects built for my employers.
 
 
 Without signing in with your google account, you'll still have access to the general application in order to see how it works with some sample feeds and sources. However, you will not be able to add or edit any data.
